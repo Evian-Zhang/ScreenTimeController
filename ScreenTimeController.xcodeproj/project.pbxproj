@@ -23,6 +23,7 @@
 		56D9B8E222C261A700E7D058 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		56D9B8E422C261A700E7D058 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		56D9B8E522C261A700E7D058 /* ScreenTimeController.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScreenTimeController.entitlements; sourceTree = "<group>"; };
+		56E88E5222C4C1310012125D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +40,7 @@
 		56D9B8CC22C261A300E7D058 = {
 			isa = PBXGroup;
 			children = (
+				56E88E5222C4C1310012125D /* README.md */,
 				56D9B8D722C261A300E7D058 /* ScreenTimeController */,
 				56D9B8D622C261A300E7D058 /* Products */,
 			);
