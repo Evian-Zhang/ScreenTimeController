@@ -27,6 +27,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.contentView = NSHostingView(rootView: ContentView())
 
         window.makeKeyAndOrderFront(nil)
+        
+        let dataModel = STCDataModel()
+        do {
+            try dataModel.connectDatabase()
+        } catch let error as STCDataModelError {
+            switch error {
+            case .executableNotExist:
+                print("executable not exist!")
+                
+            case .fileNotExist:
+                print("file not exist!")
+                
+            case .connectionFail:
+                print("connection fail!")
+                
+            case .unknown:
+                print("unknown fail!")
+            }
+        } catch {}
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

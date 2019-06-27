@@ -13,6 +13,8 @@
 		56D9B8E022C261A700E7D058 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D9B8DF22C261A700E7D058 /* Preview Assets.xcassets */; };
 		56D9B8E322C261A700E7D058 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56D9B8E122C261A700E7D058 /* Main.storyboard */; };
 		56E88E5522C4C28C0012125D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 56E88E5422C4C28C0012125D /* SQLite */; };
+		56E88E5722C4C3E60012125D /* STCDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E88E5622C4C3E60012125D /* STCDataModel.swift */; };
+		56E88E5922C4CEEA0012125D /* STCError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E88E5822C4CEEA0012125D /* STCError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +27,8 @@
 		56D9B8E422C261A700E7D058 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		56D9B8E522C261A700E7D058 /* ScreenTimeController.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScreenTimeController.entitlements; sourceTree = "<group>"; };
 		56E88E5222C4C1310012125D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		56E88E5622C4C3E60012125D /* STCDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCDataModel.swift; sourceTree = "<group>"; };
+		56E88E5822C4CEEA0012125D /* STCError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +65,8 @@
 			children = (
 				56D9B8D822C261A300E7D058 /* AppDelegate.swift */,
 				56D9B8DA22C261A300E7D058 /* ContentView.swift */,
+				56E88E5622C4C3E60012125D /* STCDataModel.swift */,
+				56E88E5822C4CEEA0012125D /* STCError.swift */,
 				56D9B8DC22C261A700E7D058 /* Assets.xcassets */,
 				56D9B8E122C261A700E7D058 /* Main.storyboard */,
 				56D9B8E422C261A700E7D058 /* Info.plist */,
@@ -156,7 +162,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				56D9B8DB22C261A300E7D058 /* ContentView.swift in Sources */,
+				56E88E5922C4CEEA0012125D /* STCError.swift in Sources */,
 				56D9B8D922C261A300E7D058 /* AppDelegate.swift in Sources */,
+				56E88E5722C4C3E60012125D /* STCDataModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
