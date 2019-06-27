@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,6 +12,7 @@
 		56D9B8DD22C261A700E7D058 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D9B8DC22C261A700E7D058 /* Assets.xcassets */; };
 		56D9B8E022C261A700E7D058 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D9B8DF22C261A700E7D058 /* Preview Assets.xcassets */; };
 		56D9B8E322C261A700E7D058 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56D9B8E122C261A700E7D058 /* Main.storyboard */; };
+		56E88E5522C4C28C0012125D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 56E88E5422C4C28C0012125D /* SQLite */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56E88E5522C4C28C0012125D /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +94,9 @@
 			dependencies = (
 			);
 			name = ScreenTimeController;
+			packageProductDependencies = (
+				56E88E5422C4C28C0012125D /* SQLite */,
+			);
 			productName = ScreenTimeController;
 			productReference = 56D9B8D522C261A300E7D058 /* ScreenTimeController.app */;
 			productType = "com.apple.product-type.application";
@@ -120,6 +125,9 @@
 				Base,
 			);
 			mainGroup = 56D9B8CC22C261A300E7D058;
+			packageReferences = (
+				56E88E5322C4C28C0012125D /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+			);
 			productRefGroup = 56D9B8D622C261A300E7D058 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -345,6 +353,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		56E88E5322C4C28C0012125D /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.12.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		56E88E5422C4C28C0012125D /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 56E88E5322C4C28C0012125D /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 56D9B8CD22C261A300E7D058 /* Project object */;
 }
