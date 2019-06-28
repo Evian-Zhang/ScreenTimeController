@@ -13,6 +13,8 @@ class STCDataModel: NSObject {
 
     var databasePath: String?
     var database: Connection?
+    let busyTimeOut = 5.0
+    let maxTriesCount = 3
     
     func determineDataBaseURL() throws {
         let process = Process()
@@ -50,5 +52,19 @@ class STCDataModel: NSObject {
         } catch {
             throw STCDataModelError.connectionFail
         }
+        self.database?.busyTimeout = self.busyTimeOut
+        self.database?.busyHandler({ tries in
+            if tries >= self.maxTriesCount {
+                return false
+            }
+            return true
+        })
+        NotificationCenter.default.post(name: .STCDatabaseConnectionSuccess, object: nil, userInfo:nil);
+    }
+    
+    func blocks(since startTime: Date?, to endTime: Date?) throws -> Array<Int> {
+        var blocks = Array<Int>()
+        Table
+        return blocks
     }
 }

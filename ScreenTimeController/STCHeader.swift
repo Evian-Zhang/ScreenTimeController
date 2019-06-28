@@ -14,3 +14,12 @@ enum STCDataModelError: Error {
     case connectionFail
     case unknown
 }
+
+extension Notification.Name {
+    static let STCDatabaseConnectionSuccess = Notification.Name("STCDatabaseConnectionSuccess")
+}
+
+struct STCTime {
+    var totalTimeInSecond: Int?
+    var startTime: Date?
+}
