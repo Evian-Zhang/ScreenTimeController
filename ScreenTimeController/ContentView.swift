@@ -9,9 +9,20 @@
 import SwiftUI
 
 struct ContentView : View {
+    var timeEntries: Array<(Int, Int, Int, Int, Date)>
     var body: some View {
-        List {
-            Text("zs")
+        List(0..<timeEntries.count) { item in
+            timeItemRow(timeEntry: self.timeEntries[item])
+        }
+    }
+}
+
+struct timeItemRow : View {
+    var timeEntry: (Int, Int, Int, Int, Date)
+    var body: some View {
+        HStack {
+            Text(String(timeEntry.1))
+            Text(timeEntry.4.description)
         }
     }
 }
@@ -20,7 +31,7 @@ struct ContentView : View {
 #if DEBUG
 struct ContentView_Previews : PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(timeEntries: [(1, 1, 1, 1, Date())])
             .environment(\.colorScheme, .dark)
     }
 }

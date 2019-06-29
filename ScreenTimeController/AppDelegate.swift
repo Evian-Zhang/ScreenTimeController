@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.center()
         window.setFrameAutosaveName("Main Window")
 
-        window.contentView = NSHostingView(rootView: ContentView())
+        window.contentView = NSHostingView(rootView: ContentView(timeEntries: [(1, 1, 1, 1, Date())]))
 
         window.makeKeyAndOrderFront(nil)
         
