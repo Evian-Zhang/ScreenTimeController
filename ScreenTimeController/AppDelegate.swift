@@ -31,6 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let dataModel = STCDataModel()
         do {
             try dataModel.connectDatabase()
+            try dataModel.blocks(since: Date(timeIntervalSinceNow: -3600 * 24), to: Date())
         } catch let error as STCDataModelError {
             switch error {
             case .executableNotExist:
@@ -41,6 +42,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 
             case .connectionFail:
                 print("connection fail!")
+                
+            case .blockTableNotFound:
+                print("block table not found!")
+                
+            case .categoryTableNotFound:
+                print("category table not found!")
+                
+            case .timedItemTableNotFound:
+                print("timed item table not found!")
+                
+            case .entryNotFound:
+                print("entry not found!")
                 
             case .unknown:
                 print("unknown fail!")
