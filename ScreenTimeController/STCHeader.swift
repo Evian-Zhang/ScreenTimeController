@@ -15,6 +15,7 @@ enum STCDataModelError: Error {
     case blockTableNotFound
     case categoryTableNotFound
     case timedItemTableNotFound
+    case installedAppTableNotFound
     case entryNotFound
     case unknown
 }
@@ -29,8 +30,10 @@ extension Notification.Name {
     static let STCDatabaseConnectionSuccess = Notification.Name("STCDatabaseConnectionSuccess")
 }
 
-struct STCBlock {
-    var Z_PK: Int?
-    var totalTimeInSecond: Int?
-    var startTime: Date?
+struct STCTimedItem {
+    var z_pk: Int
+    var ztotaltimeinseconds: Int
+    var zblock: Int
+    var zcategory: Int
+    var zstartdate: Date
 }

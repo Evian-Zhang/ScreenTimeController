@@ -119,19 +119,46 @@ class STCDataModel: NSObject {
         return categoryDict
     }
     
-    func timeEntries(since startTime: Date?, to endTime: Date?, of content: String?, by type: STCSearchType) throws -> Dictionary<Int, (Int, Int, Int, Date)> {
-        var timeEntryDict = Dictionary<Int, (Int, Int, Int, Date)>()
+    func bundleID(of applicationName: String?) throws -> String? {
+        let installedApp = Table("ZINSTALLEDAPP")
+        let ZBUNDLEIDENTIFIER = Expression<String>("ZBUNDLEIDENTIFIER")
+        let ZDISPLAYNAME = Expression<String>("ZDISPLAYNAME")
+        let query = installedApp.select(ZBUNDLEIDENTIFIER).filter(ZDISPLAYNAME == applicationName!)
+        var results: AnySequence<Row>
         
-        let categoryDict = try self.categories(since: startTime, to: endTime)
+        do {
+            try results = self.database!.prepare(query)
+        } catch {
+            throw STCDataModelError.installedAppTableNotFound
+        }
+        let resultsArray = Array(results)
+        if (resultsArray.count > 1) {
+            throw STCDataModelError.unknown
+        } else if (resultsArray.count == 0) {
+            throw STCDataModelError.entryNotFound
+        }
+        var zbundleidentifier: String?
+        do {
+            zbundleidentifier = try resultsArray[0].get(ZBUNDLEIDENTIFIER)
+        } catch {
+            throw STCDataModelError.entryNotFound
+        }
+        return zbundleidentifier
+    }
+    
+    func timeEntries(since startTime: Date?, to endTime: Date?, of content: String?, by type: STCSearchType) throws -> Array<STCTimedItem> {
+        var timeEntries = Array<STCTimedItem>()
         
         let usageTimedItem = Table("ZUSAGETIMEDITEM")
         let Z_PK = Expression<Int>("Z_PK")
         let ZCATEGORY = Expression<Int>("ZCATEGORY")
         let ZTOTALTIMEINSECONDS = Expression<Int>("ZTOTALTIMEINSECONDS")
         var ZCONTENT: Expression<String>
+        var queryContent = content
         switch type {
         case .applicationName:
-            ZCONTENT = Expression<String>("")
+            ZCONTENT = Expression<String>("ZBUNDLEIDENTIFIER")
+            try queryContent = self.bundleID(of: content)
         
         case .bundleID:
             ZCONTENT = Expression<String>("ZBUNDLEIDENTIFIER")
@@ -140,7 +167,9 @@ class STCDataModel: NSObject {
             ZCONTENT = Expression<String>("ZDOMAIN")
         }
         
-        let query = usageTimedItem.select(Z_PK, ZCATEGORY, ZTOTALTIMEINSECONDS).filter(categoryDict.keys.contains(ZCATEGORY) && ZCONTENT == content!)
+        let categoryDict = try self.categories(since: startTime, to: endTime)
+        
+        let query = usageTimedItem.select(Z_PK, ZCATEGORY, ZTOTALTIMEINSECONDS).filter(categoryDict.keys.contains(ZCATEGORY) && ZCONTENT == queryContent!)
         var results: AnySequence<Row>
         do {
             try results = self.database!.prepare(query)
@@ -153,10 +182,10 @@ class STCDataModel: NSObject {
                 let zcategory = try entry.get(ZCATEGORY)
                 let ztotaltimeinseconds = try entry.get(ZTOTALTIMEINSECONDS)
                 let (zblock, zstartdate) = categoryDict[zcategory]!
-                timeEntryDict.updateValue((ztotaltimeinseconds, zcategory, zblock, zstartdate), forKey: z_pk)
+                timeEntries.append(STCTimedItem(z_pk: z_pk, ztotaltimeinseconds: ztotaltimeinseconds, zblock: zblock, zcategory: zcategory, zstartdate: zstartdate))
             }
         }
         
-        return timeEntryDict
+        return timeEntries
     }
 }
