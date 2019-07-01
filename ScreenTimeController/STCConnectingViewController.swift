@@ -20,6 +20,8 @@ class STCConnectingViewController: NSViewController {
         self.progressIndicator?.isDisplayedWhenStopped = false
         self.progressIndicator?.startAnimation(nil)
         self.okButton?.isHidden = true
+        self.okButton?.target = self
+        self.okButton?.action = #selector(okButtonHandler)
     }
     
     func databaseConnectionSuccess() {
@@ -39,12 +41,21 @@ class STCConnectingViewController: NSViewController {
         case .connectionFail:
             self.connectingLabel?.stringValue = NSLocalizedString("Database connection failed!", comment: "")
             
+        case .deviceStateTableNotFound:
+            self.connectingLabel?.stringValue = NSLocalizedString("Cannot determine local device", comment: "")
+            
+        case .usageTableNotFound:
+            self.connectingLabel?.stringValue = NSLocalizedString("Cannot determine local device", comment: "")
+            
+        case .multipleUsers:
+            self.connectingLabel?.stringValue = NSLocalizedString("Multiple users are temporally not supported", comment: "")
+            
         default:
             self.connectingLabel?.stringValue = NSLocalizedString("Unknown", comment: "")
         }
     }
     
-    func okButtonHandler() {
+    @objc func okButtonHandler() {
         NSApp.terminate(nil)
     }
 }

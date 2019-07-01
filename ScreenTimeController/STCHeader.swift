@@ -16,7 +16,10 @@ enum STCDataModelError: Error {
     case categoryTableNotFound
     case timedItemTableNotFound
     case installedAppTableNotFound
+    case deviceStateTableNotFound
+    case usageTableNotFound
     case entryNotFound
+    case multipleUsers
     case unknown
 }
 
@@ -28,6 +31,7 @@ enum STCSearchType {
 
 extension Notification.Name {
     static let STCDatabaseConnectionSuccess = Notification.Name("STCDatabaseConnectionSuccess")
+    static let STCScreenTimeQueryStart = Notification.Name("STCScreenTimeQueryStart")
 }
 
 struct STCTimedItem {
@@ -36,4 +40,8 @@ struct STCTimedItem {
     var zblock: Int
     var zcategory: Int
     var zstartdate: Date
+    
+    func compare(other: STCTimedItem) -> ComparisonResult {
+        return self.zstartdate.compare(other.zstartdate)
+    }
 }

@@ -9,7 +9,7 @@
             <connections>
                 <outlet property="connectingLabel" destination="j5N-zB-wYv" id="80a-ch-FPk"/>
                 <outlet property="okButton" destination="EV9-99-tNS" id="Lyq-pm-44S"/>
-                <outlet property="progressIndicator" destination="4qq-Sm-eVp" id="bg0-tQ-nt0"/>
+                <outlet property="progressIndicator" destination="YRa-jB-LI3" id="Pcp-Sn-KFQ"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -23,13 +23,13 @@
                     <rect key="frame" x="396" y="13" width="59" height="32"/>
                     <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9AE-Db-Bg5">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="message"/>
+                        <font key="font" metaFont="system"/>
                         <string key="keyEquivalent" base64-UTF8="YES">
 DQ
 </string>
                     </buttonCell>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j5N-zB-wYv">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="j5N-zB-wYv">
                     <rect key="frame" x="96" y="122" width="289" height="28"/>
                     <textFieldCell key="cell" title="Connecting to database ..." id="zOF-Sw-hzY">
                         <font key="font" size="24" name="HelveticaNeue"/>
@@ -37,18 +37,17 @@ DQ
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <progressIndicator wantsLayer="YES" misplaced="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="4qq-Sm-eVp">
+                <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="YRa-jB-LI3">
                     <rect key="frame" x="74" y="128" width="16" height="16"/>
                 </progressIndicator>
             </subviews>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="j5N-zB-wYv" secondAttribute="trailing" constant="97" id="FQc-hq-1gc"/>
+                <constraint firstItem="YRa-jB-LI3" firstAttribute="centerY" secondItem="j5N-zB-wYv" secondAttribute="centerY" id="8X6-v9-teF"/>
                 <constraint firstAttribute="bottom" secondItem="EV9-99-tNS" secondAttribute="bottom" constant="20" symbolic="YES" id="SSr-fF-hUF"/>
+                <constraint firstItem="j5N-zB-wYv" firstAttribute="centerY" secondItem="Hz6-mo-xeY" secondAttribute="centerY" id="ZXd-ry-9pF"/>
                 <constraint firstAttribute="trailing" secondItem="EV9-99-tNS" secondAttribute="trailing" constant="31" id="fjz-1z-h7b"/>
                 <constraint firstItem="j5N-zB-wYv" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="hFJ-Av-SnP"/>
-                <constraint firstItem="4qq-Sm-eVp" firstAttribute="centerY" secondItem="Hz6-mo-xeY" secondAttribute="centerY" id="v23-vk-eQy"/>
-                <constraint firstItem="j5N-zB-wYv" firstAttribute="leading" secondItem="4qq-Sm-eVp" secondAttribute="trailing" constant="8" symbolic="YES" id="wr4-pg-LBK"/>
-                <constraint firstItem="4qq-Sm-eVp" firstAttribute="centerY" secondItem="j5N-zB-wYv" secondAttribute="centerY" id="z5v-z2-KMO"/>
+                <constraint firstItem="j5N-zB-wYv" firstAttribute="leading" secondItem="YRa-jB-LI3" secondAttribute="trailing" constant="8" symbolic="YES" id="xyl-t8-LZp"/>
             </constraints>
             <point key="canvasLocation" x="131" y="154"/>
         </customView>
