@@ -20,6 +20,7 @@ class STCMainWindowController: NSWindowController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(databaseConnectionSuccessHandler), name: .STCDatabaseConnectionSuccess, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(screenTimeQueryHandler(aNotification:)), name: .STCScreenTimeQueryStart, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(screenTimeDeleteHandler(aNotification:)), name: .STCScreenTimeDelete, object: nil)
     }
     
     func windowDidFirstDisplay() {
@@ -63,5 +64,20 @@ class STCMainWindowController: NSWindowController {
                 }
             } catch { }
         }
+    }
+    
+    @objc func screenTimeDeleteHandler(aNotification: Notification) {
+        let userInfo = aNotification.userInfo
+        let deletingItem = userInfo!["deletingItem"] as! STCTimedItem
+        let index = userInfo!["index"] as! Int
+        
+        let dataViewController = self.window?.contentViewController as! STCDataViewController
+        
+        do {
+            try self.dataModel?.deleteTimeEntry(timedItem: deletingItem)
+            dataViewController.transferDeletionSuccessIndex(index: index)
+        } catch let error as STCDataModelError {
+            dataViewController.transferScreenTimeDeletionError(error: error)
+        } catch { }
     }
 }

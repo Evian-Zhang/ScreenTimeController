@@ -246,4 +246,20 @@ class STCDataModel: NSObject {
         }
         return timeEntries
     }
+    
+    func deleteTimeEntry(timedItem: STCTimedItem) throws {
+        let z_pk = timedItem.z_pk
+        let usageTimedItem = Table("ZUSAGETIMEDITEM")
+        let Z_PK = Expression<Int>("Z_PK")
+        let query = usageTimedItem.filter(Z_PK == z_pk)
+        var deleteCount: Int?
+        do {
+            deleteCount = try self.database?.run(query.delete())
+        } catch {
+            throw STCDataModelError.deleteFail
+        }
+        if deleteCount ?? 0 == 0 {
+            throw STCDataModelError.entryNotFound
+        }
+    }
 }

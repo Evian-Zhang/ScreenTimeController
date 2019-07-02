@@ -49,4 +49,11 @@ class STCDataViewController: NSViewController, NSTabViewDelegate {
         }
     }
     
+    func transferDeletionSuccessIndex(index: Int) {
+        self.screenTimeViewController.deletionSuccess(of: index)
+    }
+    
+    func transferScreenTimeDeletionError(error: STCDataModelError) {
+        self.screenTimeViewController.deletionFailed(with: error)
+    }
 }

@@ -8,6 +8,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="STCScreenTimeViewController" customModule="ScreenTimeController" customModuleProvider="target">
             <connections>
                 <outlet property="contentField" destination="Wax-3B-K7F" id="PZw-8n-Yof"/>
+                <outlet property="deleteMenuItem" destination="dcK-L5-WqY" id="kbB-BX-zOr"/>
                 <outlet property="endDatePicker" destination="afR-f5-xBg" id="9YX-ec-GRC"/>
                 <outlet property="informativeField" destination="YUa-Dt-veX" id="3H6-TU-RlL"/>
                 <outlet property="popUpButton" destination="DCr-u4-zeW" id="cgr-NF-EMB"/>
@@ -15,6 +16,7 @@
                 <outlet property="queryButton" destination="sFs-eQ-RQ6" id="Xar-B2-LoR"/>
                 <outlet property="screenTimeTable" destination="XaU-5b-snc" id="R1K-b2-MFE"/>
                 <outlet property="startDatePicker" destination="XoS-9a-RA1" id="xeI-tl-m6v"/>
+                <outlet property="tableMenu" destination="3UA-Zn-DeB" id="vhZ-RM-VaY"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -25,7 +27,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DCr-u4-zeW">
-                    <rect key="frame" x="18" y="112" width="91" height="25"/>
+                    <rect key="frame" x="18" y="212" width="91" height="25"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="86" id="wdS-6j-SrW"/>
                     </constraints>
@@ -36,7 +38,7 @@
                     </popUpButtonCell>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wax-3B-K7F">
-                    <rect key="frame" x="114" y="115" width="96" height="21"/>
+                    <rect key="frame" x="114" y="215" width="96" height="21"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="96" id="rDy-DN-gxP"/>
                     </constraints>
@@ -47,7 +49,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="USA-7V-DOV">
-                    <rect key="frame" x="218" y="120" width="36" height="16"/>
+                    <rect key="frame" x="218" y="220" width="36" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="since" id="Ozo-Yc-yOJ">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -55,7 +57,7 @@
                     </textFieldCell>
                 </textField>
                 <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XoS-9a-RA1">
-                    <rect key="frame" x="260" y="112" width="100" height="28"/>
+                    <rect key="frame" x="260" y="212" width="100" height="28"/>
                     <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="RBe-O1-NTZ">
                         <font key="font" metaFont="system"/>
                         <date key="date" timeIntervalSinceReferenceDate="-595929600">
@@ -66,7 +68,7 @@
                     </datePickerCell>
                 </datePicker>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NxO-vL-Mwq">
-                    <rect key="frame" x="365" y="120" width="17" height="16"/>
+                    <rect key="frame" x="365" y="220" width="17" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="to" id="MwV-O3-IMV">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -74,7 +76,7 @@
                     </textFieldCell>
                 </textField>
                 <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="afR-f5-xBg">
-                    <rect key="frame" x="388" y="112" width="100" height="28"/>
+                    <rect key="frame" x="388" y="212" width="100" height="28"/>
                     <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="5bs-SZ-7up">
                         <font key="font" metaFont="system"/>
                         <date key="date" timeIntervalSinceReferenceDate="-595929600">
@@ -85,13 +87,13 @@
                     </datePickerCell>
                 </datePicker>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l8s-FJ-7Uo">
-                    <rect key="frame" x="20" y="20" width="539" height="63"/>
+                    <rect key="frame" x="20" y="20" width="540" height="163"/>
                     <clipView key="contentView" id="Xda-lf-VdL">
-                        <rect key="frame" x="1" y="0.0" width="537" height="62"/>
+                        <rect key="frame" x="1" y="0.0" width="538" height="162"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="OkD-wq-0Ua" viewBased="YES" id="XaU-5b-snc">
-                                <rect key="frame" x="0.0" y="0.0" width="537" height="37"/>
+                                <rect key="frame" x="0.0" y="0.0" width="538" height="137"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -99,7 +101,7 @@
                                 <tableColumns>
                                     <tableColumn identifier="STCScreenTimeTableStartTimeColumn" width="191.5" minWidth="40" maxWidth="1000" id="DdM-B7-elx">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="start time">
-                                            <font key="font" metaFont="controlContent" size="11"/>
+                                            <font key="font" metaFont="label" size="11"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -137,9 +139,9 @@
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
-                                    <tableColumn identifier="STCScreenTimeTableDurationColumn" width="339.5" minWidth="40" maxWidth="1000" id="7Ia-zy-hn2">
+                                    <tableColumn identifier="STCScreenTimeTableDurationColumn" width="340.5" minWidth="40" maxWidth="1000" id="7Ia-zy-hn2">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="duration in seconds">
-                                            <font key="font" metaFont="controlContent" size="11"/>
+                                            <font key="font" metaFont="label" size="11"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -151,7 +153,7 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView identifier="STCScreenTimeTableDuration" id="Syr-Ze-HYu">
-                                                <rect key="frame" x="196" y="1" width="339" height="17"/>
+                                                <rect key="frame" x="196" y="1" width="340" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="JLs-Jp-kZ6">
@@ -190,12 +192,12 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <tableHeaderView key="headerView" id="OkD-wq-0Ua">
-                        <rect key="frame" x="0.0" y="0.0" width="537" height="25"/>
+                        <rect key="frame" x="0.0" y="0.0" width="538" height="25"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </tableHeaderView>
                 </scrollView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sFs-eQ-RQ6">
-                    <rect key="frame" x="490" y="93" width="75" height="32"/>
+                    <rect key="frame" x="490" y="208" width="75" height="32"/>
                     <buttonCell key="cell" type="push" title="query" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="C5b-F0-soc">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -205,10 +207,10 @@ DQ
                     </buttonCell>
                 </button>
                 <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="V6N-JM-7oL">
-                    <rect key="frame" x="567" y="105" width="16" height="16"/>
+                    <rect key="frame" x="567" y="220" width="16" height="16"/>
                 </progressIndicator>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YUa-Dt-veX">
-                    <rect key="frame" x="20" y="76" width="4" height="16"/>
+                    <rect key="frame" x="20" y="191" width="4" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" id="iLL-f7-M2f">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -242,5 +244,13 @@ DQ
             </constraints>
             <point key="canvasLocation" x="225.5" y="196"/>
         </customView>
+        <menu id="3UA-Zn-DeB">
+            <items>
+                <menuItem title="Delete" id="dcK-L5-WqY">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="73" y="-80"/>
+        </menu>
     </objects>
 </document>

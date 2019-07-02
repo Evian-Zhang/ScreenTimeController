@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
+class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuItemValidation {
     
     @IBOutlet var popUpButton: NSPopUpButton?
     @IBOutlet var contentField:  NSTextField?
@@ -18,6 +18,8 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     @IBOutlet var progressIndicator: NSProgressIndicator?
     @IBOutlet var informativeField: NSTextField?
     @IBOutlet var screenTimeTable: NSTableView?
+    @IBOutlet var tableMenu: NSMenu?
+    @IBOutlet var deleteMenuItem: NSMenuItem?
     
     var timeEntries: Array<STCTimedItem>?
 
@@ -31,6 +33,9 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         self.progressIndicator?.isDisplayedWhenStopped = false
         self.screenTimeTable?.delegate = self
         self.screenTimeTable?.dataSource = self
+        self.screenTimeTable?.menu = self.tableMenu
+        self.deleteMenuItem?.target = self
+        self.deleteMenuItem?.action = #selector(deleteItemHandler)
     }
     
     func canQuery() -> (Bool, String?) {
@@ -97,22 +102,22 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
             var text = ""
             switch error {
             case .blockTableNotFound:
-                text += "Block table not found! "
+                text += NSLocalizedString("Block table not found! ", comment: "")
 
             case .categoryTableNotFound:
-                text += "Category table not found! "
+                text += NSLocalizedString("Category table not found! ", comment: "")
 
             case .timedItemTableNotFound:
-                text += "Timed item table not found! "
+                text += NSLocalizedString("Timed item table not found! ", comment: "")
 
             case .installedAppTableNotFound:
-                text += "Installed app table not found!"
+                text += NSLocalizedString("Installed app table not found!", comment: "")
 
             case .entryNotFound:
-                text += "Entry not found!"
+                text += NSLocalizedString("Entry not found!", comment: "")
                 
             default:
-                text += "Unknown. "
+                text += NSLocalizedString("Unknown error. ", comment: "")
             }
             self.informativeField?.stringValue = text
             self.informativeField?.textColor = .red
@@ -120,9 +125,47 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     }
     
     override func viewWillDisappear() {
-        self.progressIndicator?.stopAnimation(nil)
+        if self.progressIndicator?.isHidden == false {
+            self.progressIndicator?.stopAnimation(nil)
+        }
     }
     
+    // MARK: handle delete
+    @objc func deleteItemHandler() {
+        let index = self.screenTimeTable?.clickedRow
+        if index ?? -1 < 0 {
+            return
+        }
+        
+        let deletingItem = self.timeEntries?[index!]
+        NotificationCenter.default.post(name: .STCScreenTimeDelete, object: nil, userInfo: ["deletingItem": deletingItem!, "index": index!])
+    }
+    
+    func deletionSuccess(of index: Int) {
+        self.timeEntries?.remove(at: index)
+        if self.isViewLoaded && self.view.window != nil {
+            self.screenTimeTable?.reloadData()
+        }
+    }
+    
+    func deletionFailed(with error: STCDataModelError) {
+        var reason = ""
+        switch error {
+        case .deleteFail:
+            reason = NSLocalizedString("Deletion failed!", comment: "")
+            
+        case .entryNotFound:
+            reason = NSLocalizedString("Entry not found!", comment: "")
+            
+        default:
+            reason = NSLocalizedString("Unknown error.", comment: "")
+        }
+        if self.isViewLoaded && self.view.window != nil {
+            self.informativeField?.stringValue = reason
+        }
+    }
+    
+    // MARK: conform to NSTableViewDelegate and NSTableViewDataSource
     func numberOfRows(in tableView: NSTableView) -> Int {
         return self.timeEntries?.count ?? 0
     }
@@ -133,7 +176,7 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         var identifier: NSUserInterfaceItemIdentifier
         
         let formatter = DateFormatter()
-        formatter.locale = Locale.init(identifier: "zh_CN")
+        formatter.locale = Locale.current
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         
         switch tableColumn?.identifier.rawValue {
@@ -156,4 +199,14 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         }
         return nil
     }
+    
+    // MARK: conform to NSMenuItemValidation
+    func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        let index = self.screenTimeTable?.clickedRow
+        if menuItem.action == #selector(deleteItemHandler) && index ?? -1 >= 0 {
+            return true
+        }
+        return false
+    }
+    
 }
