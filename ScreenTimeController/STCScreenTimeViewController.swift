@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuItemValidation {
+class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuItemValidation, NSTextFieldDelegate {
     
     @IBOutlet var popUpButton: NSPopUpButton?
     @IBOutlet var contentField:  NSTextField?
@@ -162,6 +162,30 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         }
         if self.isViewLoaded && self.view.window != nil {
             self.informativeField?.stringValue = reason
+            self.informativeField?.textColor = .red
+        }
+    }
+    
+    // MARK: handle change
+    func changeSuccess(of index: Int, with newTimedItem: STCTimedItem) {
+        self.timeEntries![index] = newTimedItem
+        if self.isViewLoaded && self.view.window != nil {
+            self.screenTimeTable?.reloadData()
+        }
+    }
+    
+    func changeFail(with error: STCDataModelError){
+        var reason = ""
+        switch error {
+        case .changeFail:
+            reason = NSLocalizedString("Change error.", comment: "")
+            
+        default:
+            reason = NSLocalizedString("Unknown error.", comment: "")
+        }
+        if self.isViewLoaded && self.view.window != nil {
+            self.informativeField?.stringValue = reason
+            self.informativeField?.textColor = .red
         }
     }
     
@@ -195,6 +219,14 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         
         if let view = tableView.makeView(withIdentifier: identifier, owner: nil) as? NSTableCellView {
             view.textField?.stringValue = text
+            if tableColumn?.identifier.rawValue == "STCScreenTimeTableDurationColumn" {
+                view.textField?.isEditable = true
+                view.textField?.delegate = self
+                let numberFormatter = NumberFormatter()
+                numberFormatter.minimum = 0
+                numberFormatter.allowsFloats = false
+                view.textField?.formatter = numberFormatter
+            }
             return view
         }
         return nil
@@ -209,4 +241,34 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         return false
     }
     
+    // MARK: conform to NSTextFieldDelegate
+    func controlTextDidEndEditing(_ obj: Notification) {
+        let textField = obj.object as? NSTextField
+        let currentDuration = Int(textField?.intValue ?? 0)
+        let index = self.screenTimeTable?.row(for: textField!)
+        if index ?? -1 >= 0 {
+            var changingItem = self.timeEntries![index!]
+            let previousDuration = changingItem.ztotaltimeinseconds
+            if currentDuration != previousDuration {
+                changingItem.ztotaltimeinseconds = currentDuration
+                NotificationCenter.default.post(name: .STCScreenTimeChange, object: nil, userInfo: ["changingItem": changingItem, "index": index!])
+            }
+        }
+    }
+    
+    func control(_ control: NSControl, didFailToFormatString string: String, errorDescription error: String?) -> Bool {
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = NSLocalizedString("Error, please change your input.", comment: "")
+        alert.informativeText = NSLocalizedString("Only supports integer not less than 0.", comment: "")
+        let index = self.screenTimeTable?.row(for: control)
+        alert.runModal()
+        if index ?? -1 >= 0 {
+            let previousDuration = self.timeEntries![index!].ztotaltimeinseconds
+            let textField = control as? NSTextField
+            textField?.stringValue = String(previousDuration)
+        }
+        
+        return false
+    }
 }

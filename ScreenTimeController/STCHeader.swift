@@ -21,6 +21,7 @@ enum STCDataModelError: Error {
     case entryNotFound
     case multipleUsers
     case deleteFail
+    case changeFail
     case unknown
 }
 
@@ -34,6 +35,7 @@ extension Notification.Name {
     static let STCDatabaseConnectionSuccess = Notification.Name("STCDatabaseConnectionSuccess")
     static let STCScreenTimeQueryStart = Notification.Name("STCScreenTimeQueryStart")
     static let STCScreenTimeDelete = Notification.Name("STCScreenTimeDelete")
+    static let STCScreenTimeChange = Notification.Name("STCScreenTimeChange")
 }
 
 struct STCTimedItem {

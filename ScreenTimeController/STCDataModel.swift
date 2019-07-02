@@ -262,4 +262,18 @@ class STCDataModel: NSObject {
             throw STCDataModelError.entryNotFound
         }
     }
+    
+    func changeTimeEntry(timedItem: STCTimedItem) throws {
+        let z_pk = timedItem.z_pk
+        let newDuration = timedItem.ztotaltimeinseconds
+        let usageTimedItem = Table("ZUSAGETIMEDITEM")
+        let Z_PK = Expression<Int>("Z_PK")
+        let ZTOTALTIMEINSECONDS = Expression<Int>("ZTOTALTIMEINSECONDS")
+        let query = usageTimedItem.filter(Z_PK == z_pk)
+        do {
+            try self.database?.run(query.update(ZTOTALTIMEINSECONDS <- newDuration))
+        } catch {
+            throw STCDataModelError.changeFail
+        }
+    }
 }
