@@ -20,10 +20,43 @@
 		56D9B8DD22C261A700E7D058 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D9B8DC22C261A700E7D058 /* Assets.xcassets */; };
 		56D9B8E022C261A700E7D058 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D9B8DF22C261A700E7D058 /* Preview Assets.xcassets */; };
 		56D9B8E322C261A700E7D058 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56D9B8E122C261A700E7D058 /* Main.storyboard */; };
+		56E7315C22CC4FB8000A4C3C /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56E7315922CC4F8A000A4C3C /* Charts.framework */; };
+		56E7315D22CC4FB8000A4C3C /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 56E7315922CC4F8A000A4C3C /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		56E88E5522C4C28C0012125D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 56E88E5422C4C28C0012125D /* SQLite */; };
 		56E88E5722C4C3E60012125D /* STCDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E88E5622C4C3E60012125D /* STCDataModel.swift */; };
 		56E88E5922C4CEEA0012125D /* STCHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E88E5822C4CEEA0012125D /* STCHeader.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		56E7315822CC4F8A000A4C3C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56E7315322CC4F8A000A4C3C /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 65AD9E95D9ED4DC0BD73A743;
+			remoteInfo = Charts;
+		};
+		56E7315A22CC4F8A000A4C3C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56E7315322CC4F8A000A4C3C /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1CBBC58C6CE1EBEE9852CE41;
+			remoteInfo = ChartsTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		56AECC9422CC3F7E00CBBB14 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				56E7315D22CC4FB8000A4C3C /* Charts.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5653D3F022C85BC30090DBFA /* STCMainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCMainWindowController.swift; sourceTree = "<group>"; };
@@ -42,6 +75,7 @@
 		56D9B8E222C261A700E7D058 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		56D9B8E422C261A700E7D058 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		56D9B8E522C261A700E7D058 /* ScreenTimeController.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScreenTimeController.entitlements; sourceTree = "<group>"; };
+		56E7315322CC4F8A000A4C3C /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
 		56E88E5222C4C1310012125D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		56E88E5622C4C3E60012125D /* STCDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCDataModel.swift; sourceTree = "<group>"; };
 		56E88E5822C4CEEA0012125D /* STCHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCHeader.swift; sourceTree = "<group>"; };
@@ -53,6 +87,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				56E88E5522C4C28C0012125D /* SQLite in Frameworks */,
+				56E7315C22CC4FB8000A4C3C /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +100,8 @@
 				56E88E5222C4C1310012125D /* README.md */,
 				56D9B8D722C261A300E7D058 /* ScreenTimeController */,
 				56D9B8D622C261A300E7D058 /* Products */,
+				56E7313E22CC4D0C000A4C3C /* Frameworks */,
+				56E7315322CC4F8A000A4C3C /* Charts.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -108,6 +145,22 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		56E7313E22CC4D0C000A4C3C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		56E7315422CC4F8A000A4C3C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				56E7315922CC4F8A000A4C3C /* Charts.framework */,
+				56E7315B22CC4F8A000A4C3C /* ChartsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -118,6 +171,7 @@
 				56D9B8D122C261A300E7D058 /* Sources */,
 				56D9B8D222C261A300E7D058 /* Frameworks */,
 				56D9B8D322C261A300E7D058 /* Resources */,
+				56AECC9422CC3F7E00CBBB14 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -160,12 +214,35 @@
 			);
 			productRefGroup = 56D9B8D622C261A300E7D058 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 56E7315422CC4F8A000A4C3C /* Products */;
+					ProjectRef = 56E7315322CC4F8A000A4C3C /* Charts.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				56D9B8D422C261A300E7D058 /* ScreenTimeController */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		56E7315922CC4F8A000A4C3C /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 56E7315822CC4F8A000A4C3C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		56E7315B22CC4F8A000A4C3C /* ChartsTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ChartsTests.xctest;
+			remoteRef = 56E7315A22CC4F8A000A4C3C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		56D9B8D322C261A300E7D058 /* Resources */ = {

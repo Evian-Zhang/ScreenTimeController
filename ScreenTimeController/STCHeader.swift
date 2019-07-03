@@ -49,3 +49,22 @@ struct STCTimedItem {
         return self.zstartdate.compare(other.zstartdate)
     }
 }
+
+class STCTimeUnit {
+    var hour = 0
+    var minute = 0
+    var second = 0
+    
+    func addSecond(second: Int) -> STCTimeUnit {
+        self.second += second
+        if self.second >= 60 {
+            self.minute += self.second / 60
+            self.second = self.second % 60
+        }
+        if self.minute >= 60 {
+            self.hour += self.minute / 60
+            self.minute = self.minute % 60
+        }
+        return self
+    }
+}

@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import Charts
 
 class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuItemValidation, NSTextFieldDelegate {
     
@@ -20,8 +21,11 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     @IBOutlet var screenTimeTable: NSTableView?
     @IBOutlet var tableMenu: NSMenu?
     @IBOutlet var deleteMenuItem: NSMenuItem?
+    @IBOutlet var barChartView: BarChartView?
     
     var timeEntries: Array<STCTimedItem>?
+    var chartXEntries: Array<Date>?
+    var chartYEntries: Array<STCTimeUnit>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +40,36 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         self.screenTimeTable?.menu = self.tableMenu
         self.deleteMenuItem?.target = self
         self.deleteMenuItem?.action = #selector(deleteItemHandler)
+        
+        let xArray = Array(1..<10)
+        let ys1 = xArray.map { x in return sin(Double(x) / 2.0 / 3.141 * 1.5) }
+        let ys2 = xArray.map { x in return cos(Double(x) / 2.0 / 3.141) }
+        
+        let yse1 = ys1.enumerated().map { x, y in return BarChartDataEntry(x: Double(x), y: y) }
+        let yse2 = ys2.enumerated().map { x, y in return BarChartDataEntry(x: Double(x), y: y) }
+        
+        let data = BarChartData()
+        let ds1 = BarChartDataSet(entries: yse1, label: "Hello")
+        ds1.colors = [NSUIColor.red]
+        data.addDataSet(ds1)
+        
+        let ds2 = BarChartDataSet(entries: yse2, label: "World")
+        ds2.colors = [NSUIColor.blue]
+        data.addDataSet(ds2)
+        
+        let barWidth = 0.4
+        let barSpace = 0.05
+        let groupSpace = 0.1
+        
+        data.barWidth = barWidth
+        self.barChartView?.xAxis.axisMinimum = Double(xArray[0])
+        self.barChartView?.xAxis.axisMaximum = Double(xArray[0]) + data.groupWidth(groupSpace: groupSpace, barSpace: barSpace) * Double(xArray.count)
+        // (0.4 + 0.05) * 2 (data set count) + 0.1 = 1
+        data.groupBars(fromX: Double(xArray[0]), groupSpace: groupSpace, barSpace: barSpace)
+        
+        self.barChartView?.data = data
+        
+        self.barChartView?.gridBackgroundColor = NSUIColor.white
     }
     
     func canQuery() -> (Bool, String?) {
@@ -91,9 +125,68 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     }
     
     func readTimeEntries(timeEntries: Array<STCTimedItem>) {
-        self.progressIndicator?.stopAnimation(nil)
         self.timeEntries = timeEntries
         self.screenTimeTable?.reloadData()
+        
+        self.prepareForDay(of: timeEntries)
+        
+        self.progressIndicator?.stopAnimation(nil)
+    }
+    
+    // MARK: process chart data
+    func prepareForHour(of timeEntries: Array<STCTimedItem>) {
+        if (timeEntries.count == 0) {
+            return
+        }
+        
+        let firstHourRaw = (timeEntries.first?.zstartdate)!
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day, .hour], from: firstHourRaw)
+        let firstHour = calendar.date(from: components)
+        self.chartXEntries = Array<Date>()
+        self.chartXEntries?.append(firstHour!)
+        self.chartYEntries = Array<STCTimeUnit>()
+        self.chartYEntries?.append(STCTimeUnit())
+        var index = 0
+        while index < timeEntries.count {
+            let thisEntry = timeEntries[index]
+            if thisEntry.zstartdate.compare((self.chartXEntries?.last)!) == .orderedAscending {
+                self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
+                index += 1
+            } else {
+                self.chartXEntries?.append(calendar.date(byAdding: .hour, value: 1, to: (self.chartXEntries?.last)!)!)
+                self.chartYEntries?.append(STCTimeUnit())
+            }
+        }
+    }
+    
+    func prepareForDay(of timeEntries: Array<STCTimedItem>) {
+        if (timeEntries.count == 0) {
+            return
+        }
+        
+        let firstDateRaw = timeEntries.first?.zstartdate
+        let calendar = Calendar.current
+        let firstDate = calendar.startOfDay(for: firstDateRaw ?? Date())
+        self.chartXEntries = Array<Date>()
+        self.chartXEntries?.append(firstDate)
+        self.chartYEntries = Array<STCTimeUnit>()
+        self.chartYEntries?.append(STCTimeUnit())
+        var index = 0
+        while index < timeEntries.count {
+            let thisEntry = timeEntries[index]
+            if thisEntry.zstartdate.compare((self.chartXEntries?.last)!) == .orderedAscending {
+                self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
+                index += 1
+            } else {
+                self.chartXEntries?.append(calendar.date(byAdding: .day, value: 1, to: (self.chartXEntries?.last)!)!)
+                self.chartYEntries?.append(STCTimeUnit())
+            }
+        }
+    }
+    
+    func prepareForWeek(of timeEntries: Array<STCTimedItem>) {
+        
     }
     
     func queryFailed(with error: STCDataModelError) {
