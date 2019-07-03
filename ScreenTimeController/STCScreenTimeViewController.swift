@@ -9,8 +9,7 @@
 import Cocoa
 import Charts
 
-class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuItemValidation, NSTextFieldDelegate {
-    
+class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuItemValidation, NSTextFieldDelegate, IAxisValueFormatter, IValueFormatter {
     @IBOutlet var popUpButton: NSPopUpButton?
     @IBOutlet var contentField:  NSTextField?
     @IBOutlet var startDatePicker: NSDatePicker?
@@ -22,17 +21,31 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     @IBOutlet var tableMenu: NSMenu?
     @IBOutlet var deleteMenuItem: NSMenuItem?
     @IBOutlet var barChartView: BarChartView?
+    @IBOutlet var chartDisplayPopUpButton: NSPopUpButton?
     
     var timeEntries: Array<STCTimedItem>?
     var chartXEntries: Array<Date>?
     var chartYEntries: Array<STCTimeUnit>?
+    var currentDisplayUnit = STCDisplayUnit.day
+    
+    let barWidth = 0.4
+    let barSpace = 0.05
+    let barChartDataSetColor = NSColor.red
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
         self.queryButton?.target = self
         self.queryButton?.action = #selector(queryButtonHandler)
+        self.popUpButton?.removeAllItems()
         self.popUpButton?.addItems(withTitles: [NSLocalizedString("Application Name", comment: ""), NSLocalizedString("Bundle ID", comment: ""), NSLocalizedString("Domain", comment: "")])
+        self.chartDisplayPopUpButton?.removeAllItems()
+        self.chartDisplayPopUpButton?.addItems(withTitles: [NSLocalizedString("Hour", comment: ""), NSLocalizedString("Day", comment: ""), NSLocalizedString("Week", comment: ""), NSLocalizedString("Month", comment: ""), NSLocalizedString("Year", comment: "")])
+        self.chartDisplayPopUpButton?.target = self
+        self.chartDisplayPopUpButton?.action = #selector(chartDisplayPopUpButtonHandler)
+        self.chartDisplayPopUpButton?.autoenablesItems = false
+        self.chartDisplayPopUpButton?.selectItem(at: 1)
+        self.currentDisplayUnit = .day
         self.progressIndicator?.isHidden = true
         self.progressIndicator?.isDisplayedWhenStopped = false
         self.screenTimeTable?.delegate = self
@@ -41,35 +54,35 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         self.deleteMenuItem?.target = self
         self.deleteMenuItem?.action = #selector(deleteItemHandler)
         
-        let xArray = Array(1..<10)
-        let ys1 = xArray.map { x in return sin(Double(x) / 2.0 / 3.141 * 1.5) }
-        let ys2 = xArray.map { x in return cos(Double(x) / 2.0 / 3.141) }
+        self.barChartView?.doubleTapToZoomEnabled = false
+        self.barChartView?.highlightPerTapEnabled = false
+        self.barChartView?.gridBackgroundColor = .white
+        self.barChartView?.legend.enabled = false
+        self.barChartView?.xAxis.labelPosition = .bottom
+        self.barChartView?.xAxis.valueFormatter = self
+        self.barChartView?.xAxis.labelTextColor = .textColor
+        self.barChartView?.leftAxis.valueFormatter = self
+        self.barChartView?.leftAxis.labelTextColor = .textColor
+        self.barChartView?.rightAxis.valueFormatter = self
+        self.barChartView?.rightAxis.labelTextColor = .textColor
+        self.barChartView?.noDataTextColor = .textColor
+        self.barChartView?.noDataText = NSLocalizedString("No data Available", comment: "")
+    }
+    
+    func processChart() {
+        var barChartDataEntries = Array<BarChartDataEntry>()
+        for index in 0 ..< (self.chartYEntries?.count)! {
+            barChartDataEntries.append(BarChartDataEntry(x: Double(index), y: self.chartYEntries![index].doubleValue()))
+        }
+        let barChartData = BarChartData()
+        let barChartDataSet = BarChartDataSet(entries: barChartDataEntries)
+        barChartDataSet.colors = [self.barChartDataSetColor]
+        barChartData.addDataSet(barChartDataSet)
         
-        let yse1 = ys1.enumerated().map { x, y in return BarChartDataEntry(x: Double(x), y: y) }
-        let yse2 = ys2.enumerated().map { x, y in return BarChartDataEntry(x: Double(x), y: y) }
-        
-        let data = BarChartData()
-        let ds1 = BarChartDataSet(entries: yse1, label: "Hello")
-        ds1.colors = [NSUIColor.red]
-        data.addDataSet(ds1)
-        
-        let ds2 = BarChartDataSet(entries: yse2, label: "World")
-        ds2.colors = [NSUIColor.blue]
-        data.addDataSet(ds2)
-        
-        let barWidth = 0.4
-        let barSpace = 0.05
-        let groupSpace = 0.1
-        
-        data.barWidth = barWidth
-        self.barChartView?.xAxis.axisMinimum = Double(xArray[0])
-        self.barChartView?.xAxis.axisMaximum = Double(xArray[0]) + data.groupWidth(groupSpace: groupSpace, barSpace: barSpace) * Double(xArray.count)
-        // (0.4 + 0.05) * 2 (data set count) + 0.1 = 1
-        data.groupBars(fromX: Double(xArray[0]), groupSpace: groupSpace, barSpace: barSpace)
-        
-        self.barChartView?.data = data
-        
-        self.barChartView?.gridBackgroundColor = NSUIColor.white
+        barChartData.barWidth = self.barWidth
+        barChartData.setValueFormatter(self)
+        barChartData.setValueTextColor(.textColor)
+        self.barChartView?.data = barChartData
     }
     
     func canQuery() -> (Bool, String?) {
@@ -87,6 +100,53 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
             return (canQuery, reason)
         }
         return (canQuery, nil)
+    }
+    
+    @objc func chartDisplayPopUpButtonHandler() {
+        switch self.chartDisplayPopUpButton?.indexOfSelectedItem {
+        case 0:
+            self.currentDisplayUnit = .hour
+            
+        case 1:
+            self.currentDisplayUnit = .day
+            
+        case 2:
+            self.currentDisplayUnit = .week
+            
+        case 3:
+            self.currentDisplayUnit = .month
+            
+        case 4:
+            self.currentDisplayUnit = .year
+            
+        default:
+            self.currentDisplayUnit = .day
+        }
+        if let timeEntries = self.timeEntries {
+            if timeEntries.count > 0 {
+                switch self.chartDisplayPopUpButton?.indexOfSelectedItem {
+                case 0:
+                    self.prepareForHour(of: timeEntries)
+                    
+                case 1:
+                    self.prepareForDay(of: timeEntries)
+                    
+                case 2:
+                    self.prepareForWeek(of: timeEntries)
+                    
+                case 3:
+                    self.prepareForMonth(of: timeEntries)
+                    
+                case 4:
+                    self.prepareForYear(of: timeEntries)
+                    
+                default:
+                    self.prepareForDay(of: timeEntries)
+                }
+                self.processChart()
+                self.barChartView?.needsDisplay = true
+            }
+        }
     }
     
     @objc func queryButtonHandler() {
@@ -128,9 +188,61 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         self.timeEntries = timeEntries
         self.screenTimeTable?.reloadData()
         
-        self.prepareForDay(of: timeEntries)
-        
+        switch self.chartDisplayPopUpButton?.indexOfSelectedItem {
+        case 0:
+            self.prepareForHour(of: timeEntries)
+            
+        case 1:
+            self.prepareForDay(of: timeEntries)
+            
+        case 2:
+            self.prepareForWeek(of: timeEntries)
+            
+        case 3:
+            self.prepareForMonth(of: timeEntries)
+            
+        case 4:
+            self.prepareForYear(of: timeEntries)
+            
+        default:
+            self.prepareForDay(of: timeEntries)
+        }
+        self.processChart()
         self.progressIndicator?.stopAnimation(nil)
+    }
+    
+    func queryFailed(with error: STCDataModelError) {
+        DispatchQueue.main.async {
+            self.progressIndicator?.stopAnimation(nil)
+            var text = ""
+            switch error {
+            case .blockTableNotFound:
+                text += NSLocalizedString("Block table not found! ", comment: "")
+                
+            case .categoryTableNotFound:
+                text += NSLocalizedString("Category table not found! ", comment: "")
+                
+            case .timedItemTableNotFound:
+                text += NSLocalizedString("Timed item table not found! ", comment: "")
+                
+            case .installedAppTableNotFound:
+                text += NSLocalizedString("Installed app table not found!", comment: "")
+                
+            case .entryNotFound:
+                text += NSLocalizedString("Entry not found!", comment: "")
+                
+            default:
+                text += NSLocalizedString("Unknown error. ", comment: "")
+            }
+            self.informativeField?.stringValue = text
+            self.informativeField?.textColor = .red
+        }
+    }
+    
+    override func viewWillDisappear() {
+        if self.progressIndicator?.isHidden == false {
+            self.progressIndicator?.stopAnimation(nil)
+        }
     }
     
     // MARK: process chart data
@@ -150,11 +262,12 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         var index = 0
         while index < timeEntries.count {
             let thisEntry = timeEntries[index]
-            if thisEntry.zstartdate.compare((self.chartXEntries?.last)!) == .orderedAscending {
+            let nextUnit = calendar.date(byAdding: .hour, value: 1, to: (self.chartXEntries?.last)!)!
+            if thisEntry.zstartdate.compare(nextUnit) == .orderedAscending {
                 self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
                 index += 1
             } else {
-                self.chartXEntries?.append(calendar.date(byAdding: .hour, value: 1, to: (self.chartXEntries?.last)!)!)
+                self.chartXEntries?.append(nextUnit)
                 self.chartYEntries?.append(STCTimeUnit())
             }
         }
@@ -175,53 +288,101 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         var index = 0
         while index < timeEntries.count {
             let thisEntry = timeEntries[index]
-            if thisEntry.zstartdate.compare((self.chartXEntries?.last)!) == .orderedAscending {
+            let nextUnit = calendar.date(byAdding: .day, value: 1, to: (self.chartXEntries?.last)!)!
+            if thisEntry.zstartdate.compare(nextUnit) == .orderedAscending {
                 self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
                 index += 1
             } else {
-                self.chartXEntries?.append(calendar.date(byAdding: .day, value: 1, to: (self.chartXEntries?.last)!)!)
+                self.chartXEntries?.append(nextUnit)
                 self.chartYEntries?.append(STCTimeUnit())
             }
         }
     }
     
     func prepareForWeek(of timeEntries: Array<STCTimedItem>) {
+        if (timeEntries.count == 0) {
+            return
+        }
         
-    }
-    
-    func queryFailed(with error: STCDataModelError) {
-        DispatchQueue.main.async {
-            self.progressIndicator?.stopAnimation(nil)
-            var text = ""
-            switch error {
-            case .blockTableNotFound:
-                text += NSLocalizedString("Block table not found! ", comment: "")
-
-            case .categoryTableNotFound:
-                text += NSLocalizedString("Category table not found! ", comment: "")
-
-            case .timedItemTableNotFound:
-                text += NSLocalizedString("Timed item table not found! ", comment: "")
-
-            case .installedAppTableNotFound:
-                text += NSLocalizedString("Installed app table not found!", comment: "")
-
-            case .entryNotFound:
-                text += NSLocalizedString("Entry not found!", comment: "")
-                
-            default:
-                text += NSLocalizedString("Unknown error. ", comment: "")
+        let firstWeekRaw = timeEntries.first?.zstartdate
+        let calendar = Calendar.current
+        let thisDay = calendar.startOfDay(for: firstWeekRaw!)
+        let firstWeek = calendar.date(bySetting: .weekday, value: 1, of: thisDay)
+        
+        self.chartXEntries = Array<Date>()
+        self.chartXEntries?.append(firstWeek!)
+        self.chartYEntries = Array<STCTimeUnit>()
+        self.chartYEntries?.append(STCTimeUnit())
+        var index = 0
+        while index < timeEntries.count {
+            let thisEntry = timeEntries[index]
+            let nextUnit = calendar.date(byAdding: .weekOfYear, value: 1, to: (self.chartXEntries?.last)!)!
+            if thisEntry.zstartdate.compare(nextUnit) == .orderedAscending {
+                self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
+                index += 1
+            } else {
+                self.chartXEntries?.append(nextUnit)
+                self.chartYEntries?.append(STCTimeUnit())
             }
-            self.informativeField?.stringValue = text
-            self.informativeField?.textColor = .red
         }
     }
     
-    override func viewWillDisappear() {
-        if self.progressIndicator?.isHidden == false {
-            self.progressIndicator?.stopAnimation(nil)
+    func prepareForMonth(of timeEntries: Array<STCTimedItem>) {
+        if (timeEntries.count == 0) {
+            return
+        }
+        
+        let firstMonthRaw = timeEntries.first?.zstartdate
+        let calendar = Calendar.current
+        let thisDay = calendar.startOfDay(for: firstMonthRaw!)
+        let firstMonth = calendar.date(bySetting: .day, value: 1, of: thisDay)
+        
+        self.chartXEntries = Array<Date>()
+        self.chartXEntries?.append(firstMonth!)
+        self.chartYEntries = Array<STCTimeUnit>()
+        self.chartYEntries?.append(STCTimeUnit())
+        var index = 0
+        while index < timeEntries.count {
+            let thisEntry = timeEntries[index]
+            let nextUnit = calendar.date(byAdding: .month, value: 1, to: (self.chartXEntries?.last)!)!
+            if thisEntry.zstartdate.compare(nextUnit) == .orderedAscending {
+                self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
+                index += 1
+            } else {
+                self.chartXEntries?.append(nextUnit)
+                self.chartYEntries?.append(STCTimeUnit())
+            }
         }
     }
+    
+    func prepareForYear(of timeEntries: Array<STCTimedItem>) {
+        if (timeEntries.count == 0) {
+            return
+        }
+        
+        let firstYearRaw = timeEntries.first?.zstartdate
+        let calendar = Calendar.current
+        let thisDay = calendar.startOfDay(for: firstYearRaw!)
+        let firstYear = calendar.date(from: calendar.dateComponents([.year], from: thisDay))
+        
+        self.chartXEntries = Array<Date>()
+        self.chartXEntries?.append(firstYear!)
+        self.chartYEntries = Array<STCTimeUnit>()
+        self.chartYEntries?.append(STCTimeUnit())
+        var index = 0
+        while index < timeEntries.count {
+            let thisEntry = timeEntries[index]
+            let nextUnit = calendar.date(byAdding: .year, value: 1, to: (self.chartXEntries?.last)!)!
+            if thisEntry.zstartdate.compare(nextUnit) == .orderedAscending {
+                self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
+                index += 1
+            } else {
+                self.chartXEntries?.append(nextUnit)
+                self.chartYEntries?.append(STCTimeUnit())
+            }
+        }
+    }
+    
     
     // MARK: handle delete
     @objc func deleteItemHandler() {
@@ -363,5 +524,39 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         }
         
         return false
+    }
+    
+    // MARK: conform to IValueFormatter
+    func stringForValue(_ value: Double, entry: ChartDataEntry, dataSetIndex: Int, viewPortHandler: ViewPortHandler?) -> String {
+        return STCTimeUnit.timeUnit(of: value).stringValue()
+    }
+    
+    // MARK: conform to IAxisValueFormatter
+    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+        if (axis as? XAxis) != nil {
+            let formatter = DateFormatter()
+            formatter.locale = Locale.current
+            switch self.currentDisplayUnit {
+            case .hour:
+                formatter.dateFormat = "HH"
+                
+            case .day:
+                formatter.dateFormat = "MM-dd"
+                
+            case .week:
+                formatter.dateFormat = "MM-dd"
+                
+            case .month:
+                formatter.dateFormat = "MM"
+                
+            case .year:
+                formatter.dateFormat = "yyyy"
+            }
+            return formatter.string(from: self.chartXEntries![Int(value)])
+        }
+        if (axis as? YAxis) != nil {
+            return STCTimeUnit.timeUnit(of: value).stringValue()
+        }
+        return ""
     }
 }

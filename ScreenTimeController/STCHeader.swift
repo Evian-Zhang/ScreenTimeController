@@ -31,6 +31,14 @@ enum STCSearchType {
     case domain
 }
 
+enum STCDisplayUnit {
+    case hour
+    case day
+    case week
+    case month
+    case year
+}
+
 extension Notification.Name {
     static let STCDatabaseConnectionSuccess = Notification.Name("STCDatabaseConnectionSuccess")
     static let STCScreenTimeQueryStart = Notification.Name("STCScreenTimeQueryStart")
@@ -66,5 +74,31 @@ class STCTimeUnit {
             self.minute = self.minute % 60
         }
         return self
+    }
+    
+    func doubleValue() -> Double {
+        return Double(self.hour) * 60 + Double(self.minute) +  Double(self.second) / 60
+    }
+    
+    func stringValue() -> String {
+        var description = ""
+        if self.hour > 0 {
+            description += NSLocalizedString(String(format: "%dh", self.hour), comment: "")
+        }
+        if !((self.hour == 0 || self.second == 0) && self.minute == 0) {
+            description += NSLocalizedString(String(format: "%dm", self.minute), comment: "")
+        }
+        if !((self.hour != 0 || self.minute != 0) && self.second == 0) {
+            description += NSLocalizedString(String(format: "%ds", self.second), comment: "")
+        }
+        return description
+    }
+    
+    static func timeUnit(of value: Double) -> STCTimeUnit {
+        var timeUnit = STCTimeUnit()
+        timeUnit.hour = Int(value) / 60
+        timeUnit.minute = Int(value) % 60
+        timeUnit.second = Int((value - Double(Int(value))) * 60)
+        return timeUnit
     }
 }
