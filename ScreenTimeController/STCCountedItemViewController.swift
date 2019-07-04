@@ -1,15 +1,15 @@
 //
-//  STCScreenTimeViewController.swift
+//  STCCountedItemViewController.swift
 //  ScreenTimeController
 //
-//  Created by Evian张 on 2019/6/30.
+//  Created by Evian张 on 2019/7/4.
 //  Copyright © 2019 Evian张. All rights reserved.
 //
 
 import Cocoa
 import Charts
 
-class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuItemValidation, NSTextFieldDelegate, IAxisValueFormatter, IValueFormatter {
+class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuItemValidation, NSTextFieldDelegate, IAxisValueFormatter, IValueFormatter {
     @IBOutlet var popUpButton: NSPopUpButton?
     @IBOutlet var contentField:  NSTextField?
     @IBOutlet var startDatePicker: NSDatePicker?
@@ -17,13 +17,13 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     @IBOutlet var queryButton: NSButton?
     @IBOutlet var progressIndicator: NSProgressIndicator?
     @IBOutlet var informativeField: NSTextField?
-    @IBOutlet var screenTimeTable: NSTableView?
+    @IBOutlet var countedItemTable: NSTableView?
     @IBOutlet var tableMenu: NSMenu?
     @IBOutlet var deleteMenuItem: NSMenuItem?
     @IBOutlet var barChartView: BarChartView?
     @IBOutlet var chartDisplayPopUpButton: NSPopUpButton?
-    
-    var timeEntries: Array<STCTimedItem>?
+
+    var countedItems: Array<STCCountedItem>?
     var chartXEntries: Array<Date>?
     var chartYEntries: Array<STCTimeUnit>?
     var currentDisplayUnit = STCDisplayUnit.day
@@ -31,14 +31,14 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     let barWidth = 0.4
     let barSpace = 0.05
     let barChartDataSetColor = NSColor.red
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
         self.queryButton?.target = self
         self.queryButton?.action = #selector(queryButtonHandler)
         self.popUpButton?.removeAllItems()
-        self.popUpButton?.addItems(withTitles: [NSLocalizedString("Application Name", comment: ""), NSLocalizedString("Bundle ID", comment: ""), NSLocalizedString("Domain", comment: "")])
+        self.popUpButton?.addItems(withTitles: [NSLocalizedString("Application Name", comment: ""), NSLocalizedString("Bundle ID", comment: "")])
         self.chartDisplayPopUpButton?.removeAllItems()
         self.chartDisplayPopUpButton?.addItems(withTitles: [NSLocalizedString("Hour", comment: ""), NSLocalizedString("Day", comment: ""), NSLocalizedString("Week", comment: ""), NSLocalizedString("Month", comment: ""), NSLocalizedString("Year", comment: "")])
         self.chartDisplayPopUpButton?.target = self
@@ -48,9 +48,9 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         self.currentDisplayUnit = .day
         self.progressIndicator?.isHidden = true
         self.progressIndicator?.isDisplayedWhenStopped = false
-        self.screenTimeTable?.delegate = self
-        self.screenTimeTable?.dataSource = self
-        self.screenTimeTable?.menu = self.tableMenu
+        self.countedItemTable?.delegate = self
+        self.countedItemTable?.dataSource = self
+        self.countedItemTable?.menu = self.tableMenu
         self.deleteMenuItem?.target = self
         self.deleteMenuItem?.action = #selector(deleteItemHandler)
         
@@ -69,25 +69,25 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         self.barChartView?.noDataText = NSLocalizedString("No data Available", comment: "")
     }
     
-    func processChartData(timeEntries: Array<STCTimedItem>) {
+    func processChartData(countedItems: Array<STCCountedItem>) {
         switch self.chartDisplayPopUpButton?.indexOfSelectedItem {
         case 0:
-            self.prepareForHour(of: timeEntries)
+            self.prepareForHour(of: countedItems)
             
         case 1:
-            self.prepareForDay(of: timeEntries)
+            self.prepareForDay(of: countedItems)
             
         case 2:
-            self.prepareForWeek(of: timeEntries)
+            self.prepareForWeek(of: countedItems)
             
         case 3:
-            self.prepareForMonth(of: timeEntries)
+            self.prepareForMonth(of: countedItems)
             
         case 4:
-            self.prepareForYear(of: timeEntries)
+            self.prepareForYear(of: countedItems)
             
         default:
-            self.prepareForDay(of: timeEntries)
+            self.prepareForDay(of: countedItems)
         }
     }
     
@@ -144,9 +144,9 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         default:
             self.currentDisplayUnit = .day
         }
-        if let timeEntries = self.timeEntries {
-            if timeEntries.count > 0 {
-                self.processChartData(timeEntries: timeEntries)
+        if let countedItem = self.countedItems {
+            if countedItem.count > 0 {
+                self.processChartData(countedItems: countedItem)
                 self.processChart()
                 self.barChartView?.needsDisplay = true
             }
@@ -171,11 +171,8 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
             case 1:
                 searchType = .bundleID
                 
-            case 2:
-                searchType = .domain
-                
             default:
-                break
+                searchType = .bundleID
             }
             
             let content = self.contentField?.stringValue
@@ -184,15 +181,15 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
             let queryID = arc4random() % 1024
             
             let userInfo = ["searchType": searchType, "content": content!, "startDate": startDate!, "endDate": endDate!, "queryID": queryID] as [String : Any]
-            NotificationCenter.default.post(name: .STCScreenTimeQueryStart, object: nil, userInfo: userInfo)
+            NotificationCenter.default.post(name: .STCCountedItemQueryStart, object: nil, userInfo: userInfo)
         }
     }
     
-    func readTimeEntries(timeEntries: Array<STCTimedItem>) {
-        self.timeEntries = timeEntries
-        self.screenTimeTable?.reloadData()
+    func readCountedItems(countedItems: Array<STCCountedItem>) {
+        self.countedItems = countedItems
+        self.countedItemTable?.reloadData()
         
-        self.processChartData(timeEntries: timeEntries)
+        self.processChartData(countedItems: countedItems)
         self.processChart()
         self.progressIndicator?.stopAnimation(nil)
     }
@@ -205,11 +202,8 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
             case .blockTableNotFound:
                 text += NSLocalizedString("Block table not found! ", comment: "")
                 
-            case .categoryTableNotFound:
-                text += NSLocalizedString("Category table not found! ", comment: "")
-                
-            case .timedItemTableNotFound:
-                text += NSLocalizedString("Timed item table not found! ", comment: "")
+            case .countedItemTableNotFound:
+                text += NSLocalizedString("Counted item table not found! ", comment: "")
                 
             case .installedAppTableNotFound:
                 text += NSLocalizedString("Installed app table not found! ", comment: "")
@@ -372,21 +366,21 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     
     // MARK: handle delete
     @objc func deleteItemHandler() {
-        let index = self.screenTimeTable?.clickedRow
+        let index = self.countedItemTable?.clickedRow
         if index ?? -1 < 0 {
             return
         }
         
-        let deletingItem = self.timeEntries?[index!]
-        NotificationCenter.default.post(name: .STCScreenTimeDelete, object: nil, userInfo: ["deletingItem": deletingItem!, "index": index!])
+        let deletingItem = self.countedItems?[index!]
+        NotificationCenter.default.post(name: .STCCountedItemDelete, object: nil, userInfo: ["deletingItem": deletingItem!, "index": index!])
     }
     
     func deletionSuccess(of index: Int) {
-        self.timeEntries?.remove(at: index)
+        self.countedItems?.remove(at: index)
         if self.isViewLoaded && self.view.window != nil {
-            self.screenTimeTable?.reloadData()
-            if let timeEntries = self.timeEntries {
-                self.processChartData(timeEntries: timeEntries)
+            self.countedItemTable?.reloadData()
+            if let countedItems = self.countedItems {
+                self.processChartData(countedItems: countedItems)
                 self.processChart()
             }
         }
@@ -411,12 +405,12 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     }
     
     // MARK: handle change
-    func changeSuccess(of index: Int, with newTimedItem: STCTimedItem) {
-        self.timeEntries![index] = newTimedItem
+    func changeSuccess(of index: Int, with newCountedItem: STCCountedItem) {
+        self.countedItems![index] = newCountedItem
         if self.isViewLoaded && self.view.window != nil {
-            self.screenTimeTable?.reloadData()
-            if let timeEntries = self.timeEntries {
-                self.processChartData(timeEntries: timeEntries)
+            self.countedItemTable?.reloadData()
+            if let countedItems = self.countedItems {
+                self.processChartData(countedItems: countedItems)
                 self.processChart()
             }
         }
@@ -439,11 +433,11 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     
     // MARK: conform to NSTableViewDelegate and NSTableViewDataSource
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return self.timeEntries?.count ?? 0
+        return self.countedItems?.count ?? 0
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let timeEntry = self.timeEntries![row]
+        let timeEntry = self.countedItems![row]
         var text = ""
         var identifier: NSUserInterfaceItemIdentifier
         
@@ -452,13 +446,17 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         
         switch tableColumn?.identifier.rawValue {
-        case "STCScreenTimeTableStartTimeColumn":
+        case "STCCountedItemTableStartTimeColumn":
             text = formatter.string(from: timeEntry.zstartdate)
-            identifier = NSUserInterfaceItemIdentifier("STCScreenTimeTableStartTime")
+            identifier = NSUserInterfaceItemIdentifier("STCCountedItemTableStartTime")
             
-        case "STCScreenTimeTableDurationColumn":
-            text = String(timeEntry.ztotaltimeinseconds)
-            identifier = NSUserInterfaceItemIdentifier("STCScreenTimeTableDuration")
+        case "STCCountedItemTableNotificationsColumn":
+            text = String(timeEntry.znumberofnotifications)
+            identifier = NSUserInterfaceItemIdentifier("STCCountedItemTableNotifications")
+            
+        case "STCCountedItemTablePickupsColumn":
+            text = String(timeEntry.znumberofpickups)
+            identifier = NSUserInterfaceItemIdentifier("STCCountedItemTablePickups")
             
         default:
             text = ""
@@ -467,7 +465,7 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         
         if let view = tableView.makeView(withIdentifier: identifier, owner: nil) as? NSTableCellView {
             view.textField?.stringValue = text
-            if tableColumn?.identifier.rawValue == "STCScreenTimeTableDurationColumn" {
+            if tableColumn?.identifier.rawValue == "STCCountedItemTableNotifications" || tableColumn?.identifier.rawValue == "STCCountedItemTablePickups" {
                 view.textField?.isEditable = true
                 view.textField?.delegate = self
                 let numberFormatter = NumberFormatter()
@@ -482,7 +480,7 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     
     // MARK: conform to NSMenuItemValidation
     func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-        let index = self.screenTimeTable?.clickedRow
+        let index = self.countedItemTable?.clickedRow
         if menuItem.action == #selector(deleteItemHandler) && index ?? -1 >= 0 {
             return true
         }
@@ -492,14 +490,26 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     // MARK: conform to NSTextFieldDelegate
     func controlTextDidEndEditing(_ obj: Notification) {
         let textField = obj.object as? NSTextField
-        let currentDuration = Int(textField?.intValue ?? 0)
-        let index = self.screenTimeTable?.row(for: textField!)
-        if index ?? -1 >= 0 {
-            var changingItem = self.timeEntries![index!]
-            let previousDuration = changingItem.ztotaltimeinseconds
-            if currentDuration != previousDuration {
-                changingItem.ztotaltimeinseconds = currentDuration
-                NotificationCenter.default.post(name: .STCScreenTimeChange, object: nil, userInfo: ["changingItem": changingItem, "index": index!])
+        let row = self.countedItemTable?.row(for: textField!)
+        let column = self.countedItemTable?.column(for: textField!)
+        if row ?? -1 >= 0 && column ?? -1 >= 0 {
+            var changingItem = self.countedItems![row!]
+            let current = Int(textField?.intValue ?? 0)
+            var previous = 0
+            if column == 1 {
+                previous = changingItem.znumberofnotifications
+                
+                if current != previous {
+                    changingItem.znumberofnotifications = current
+                    NotificationCenter.default.post(name: .STCScreenTimeChange, object: nil, userInfo: ["changingItem": changingItem, "index": row!])
+                }
+            } else if column == 2 {
+                previous = changingItem.znumberofpickups
+                
+                if current != previous {
+                    changingItem.znumberofpickups = current
+                    NotificationCenter.default.post(name: .STCScreenTimeChange, object: nil, userInfo: ["changingItem": changingItem, "index": row!])
+                }
             }
         }
     }
@@ -509,12 +519,18 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         alert.alertStyle = .informational
         alert.messageText = NSLocalizedString("Error, please change your input.", comment: "")
         alert.informativeText = NSLocalizedString("Only supports integer not less than 0.", comment: "")
-        let index = self.screenTimeTable?.row(for: control)
+        let row = self.countedItemTable?.row(for: control)
+        let column = self.countedItemTable?.column(for: control)
         alert.runModal()
-        if index ?? -1 >= 0 {
-            let previousDuration = self.timeEntries![index!].ztotaltimeinseconds
+        if row ?? -1 >= 0 && column ?? -1 >= 0 {
+            var previous = 0
+            if column == 1 {
+                previous = changingItem.znumberofnotifications
+            } else if column == 2 {
+                previous = changingItem.znumberofpickups
+            }
             let textField = control as? NSTextField
-            textField?.stringValue = String(previousDuration)
+            textField?.stringValue = String(previous)
         }
         
         return false
@@ -553,4 +569,5 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         }
         return ""
     }
+    
 }

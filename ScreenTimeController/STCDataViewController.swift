@@ -13,6 +13,7 @@ class STCDataViewController: NSViewController, NSTabViewDelegate {
     @IBOutlet var tabView: NSTabView?
     
     let screenTimeViewController = STCScreenTimeViewController(nibName: "STCScreenTimeViewController", bundle: nil)
+    let countedItemViewController = STCCountedItemViewController(nibName: "STCCountedItemViewController", bundle: nil)
     
     var lastQueryID: UInt32 = 0
     
@@ -26,6 +27,7 @@ class STCDataViewController: NSViewController, NSTabViewDelegate {
         super.viewDidLoad()
         // Do view setup here.
         self.tabView?.tabViewItem(at: 0).view = self.screenTimeViewController.view
+        self.tabView?.tabViewItem(at: 1).view = self.countedItemViewController.view
         self.tabView?.delegate = self
     }
     
@@ -33,6 +35,7 @@ class STCDataViewController: NSViewController, NSTabViewDelegate {
         self.lastQueryID += 1
     }
     
+    // MARK: transferrer for timed item
     func transferTimeEntry(timeEntry: Array<STCTimedItem>) {
         DispatchQueue.main.async {
             if self.currentTabIndex == 0 {
@@ -63,5 +66,38 @@ class STCDataViewController: NSViewController, NSTabViewDelegate {
     
     func transferScreenTimeChangingError(error: STCDataModelError) {
         self.screenTimeViewController.changeFail(with: error)
+    }
+    
+    // MARK: transferrer for counted item
+    func transferCountedItem(countedItems: Array<STCCountedItem>) {
+        DispatchQueue.main.async {
+            if self.currentTabIndex == 0 {
+                self.countedItemViewController.readTimeEntries(countedItems: countedItems)
+            }
+        }
+    }
+    
+    func transferCountedItemError(error: STCDataModelError) {
+        DispatchQueue.main.async {
+            if self.currentTabIndex == 0 {
+                self.countedItemViewController.queryFailed(with: error)
+            }
+        }
+    }
+    
+    func transferCountedItemDeletionSuccessIndex(index: Int) {
+        self.countedItemViewController.deletionSuccess(of: index)
+    }
+    
+    func transferCountedItemDeletionError(error: STCDataModelError) {
+        self.countedItemViewController.deletionFailed(with: error)
+    }
+    
+    func transferCountedItemChangingSuccess(countedItem: STCCountedItem, index: Int) {
+        self.countedItemViewController.changeSuccess(of: index, with: countedItem)
+    }
+    
+    func transferCountedItemChangingError(error: STCDataModelError) {
+        self.countedItemViewController.changeFail(with: error)
     }
 }

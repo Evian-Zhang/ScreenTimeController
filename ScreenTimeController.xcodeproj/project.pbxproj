@@ -15,6 +15,8 @@
 		569189CB22C88F7B00CC6A7E /* STCDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 569189C922C88F7B00CC6A7E /* STCDataViewController.xib */; };
 		569189CE22C8914F00CC6A7E /* STCScreenTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569189CC22C8914F00CC6A7E /* STCScreenTimeViewController.swift */; };
 		569189CF22C8914F00CC6A7E /* STCScreenTimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 569189CD22C8914F00CC6A7E /* STCScreenTimeViewController.xib */; };
+		56990BD422CD9D2B00B3217B /* STCCountedItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56990BD222CD9D2B00B3217B /* STCCountedItemViewController.swift */; };
+		56990BD522CD9D2B00B3217B /* STCCountedItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56990BD322CD9D2B00B3217B /* STCCountedItemViewController.xib */; };
 		56D9B8D922C261A300E7D058 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9B8D822C261A300E7D058 /* AppDelegate.swift */; };
 		56D9B8DB22C261A300E7D058 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9B8DA22C261A300E7D058 /* ContentView.swift */; };
 		56D9B8DD22C261A700E7D058 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D9B8DC22C261A700E7D058 /* Assets.xcassets */; };
@@ -67,6 +69,8 @@
 		569189C922C88F7B00CC6A7E /* STCDataViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STCDataViewController.xib; sourceTree = "<group>"; };
 		569189CC22C8914F00CC6A7E /* STCScreenTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCScreenTimeViewController.swift; sourceTree = "<group>"; };
 		569189CD22C8914F00CC6A7E /* STCScreenTimeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STCScreenTimeViewController.xib; sourceTree = "<group>"; };
+		56990BD222CD9D2B00B3217B /* STCCountedItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCCountedItemViewController.swift; sourceTree = "<group>"; };
+		56990BD322CD9D2B00B3217B /* STCCountedItemViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STCCountedItemViewController.xib; sourceTree = "<group>"; };
 		56D9B8D522C261A300E7D058 /* ScreenTimeController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenTimeController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56D9B8D822C261A300E7D058 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56D9B8DA22C261A300E7D058 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -128,6 +132,8 @@
 				569189C922C88F7B00CC6A7E /* STCDataViewController.xib */,
 				569189CC22C8914F00CC6A7E /* STCScreenTimeViewController.swift */,
 				569189CD22C8914F00CC6A7E /* STCScreenTimeViewController.xib */,
+				56990BD222CD9D2B00B3217B /* STCCountedItemViewController.swift */,
+				56990BD322CD9D2B00B3217B /* STCCountedItemViewController.xib */,
 				56D9B8DC22C261A700E7D058 /* Assets.xcassets */,
 				56D9B8E122C261A700E7D058 /* Main.storyboard */,
 				56D9B8E422C261A700E7D058 /* Info.plist */,
@@ -255,6 +261,7 @@
 				569189CF22C8914F00CC6A7E /* STCScreenTimeViewController.xib in Resources */,
 				56D9B8DD22C261A700E7D058 /* Assets.xcassets in Resources */,
 				5653D3F322C85BC30090DBFA /* STCMainWindowController.xib in Resources */,
+				56990BD522CD9D2B00B3217B /* STCCountedItemViewController.xib in Resources */,
 				569189CB22C88F7B00CC6A7E /* STCDataViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -268,6 +275,7 @@
 			files = (
 				56D9B8DB22C261A300E7D058 /* ContentView.swift in Sources */,
 				56E88E5922C4CEEA0012125D /* STCHeader.swift in Sources */,
+				56990BD422CD9D2B00B3217B /* STCCountedItemViewController.swift in Sources */,
 				569189CA22C88F7B00CC6A7E /* STCDataViewController.swift in Sources */,
 				56D9B8D922C261A300E7D058 /* AppDelegate.swift in Sources */,
 				569189CE22C8914F00CC6A7E /* STCScreenTimeViewController.swift in Sources */,

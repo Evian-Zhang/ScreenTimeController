@@ -201,6 +201,7 @@ class STCDataModel: NSObject {
         return zbundleidentifier
     }
     
+    // MARK: handle timed item
     func timeEntries(since startTime: Date?, to endTime: Date?, of content: String?, by type: STCSearchType) throws -> Array<STCTimedItem> {
         var timeEntries = Array<STCTimedItem>()
         
@@ -272,6 +273,79 @@ class STCDataModel: NSObject {
         let query = usageTimedItem.filter(Z_PK == z_pk)
         do {
             try self.database?.run(query.update(ZTOTALTIMEINSECONDS <- newDuration))
+        } catch {
+            throw STCDataModelError.changeFail
+        }
+    }
+    
+    // MARK: handle counted item
+    func countedItems(since startTime: Date?, to endTime: Date?, of content: String?, by type: STCSearchType) throws -> Array<STCCountedItem> {
+        var countedItems = Array<STCCountedItem>()
+        
+        let usageCountedItem = Table("ZUSAGECOUNTEDITEM")
+        let Z_PK = Expression<Int>("Z_PK")
+        let ZNUMBEROFNOTIFICATIONS = Expression<Int>("ZNUMBEROFNOTIFICATIONS")
+        let ZNUMBEROFPICKUPS = Expression<Int>("ZNUMBEROFPICKUPS")
+        let ZBLOCK = Expression<Int>("ZBLOCK")
+        let ZBUNDLEIDENTIFIER = Expression<String>("ZBUNDLEIDENTIFIER")
+        var queryContent = content
+        if type == .applicationName {
+            try queryContent = self.bundleID(of: content)
+        }
+        
+        let blockDict = try self.blocks(since: startTime, to: endTime)
+        
+        let query = usageCountedItem.select(Z_PK, ZNUMBEROFNOTIFICATIONS, ZNUMBEROFPICKUPS, ZBLOCK).filter(blockDict.keys.contains(ZBLOCK) && ZBUNDLEIDENTIFIER == queryContent!)
+        var results: AnySequence<Row>
+        do {
+            try results = self.database!.prepare(query)
+        } catch {
+            throw STCDataModelError.countedItemTableNotFound
+        }
+        do {
+            for entry in results {
+                let z_pk = try entry.get(Z_PK)
+                let znumberofnotifications = try entry.get(ZNUMBEROFNOTIFICATIONS)
+                let znumberofpickups = try entry.get(ZNUMBEROFPICKUPS)
+                let zblock = try entry.get(ZBLOCK)
+                let zstartdate = blockDict[zblock]!
+                countedItems.append(STCCountedItem(z_pk: z_pk, znumberofnotifications: znumberofnotifications, znumberofpickups: znumberofpickups, zblock: zblock, zstartdate: zstartdate))
+            }
+        }
+        
+        countedItems.sort { (a, b) -> Bool in
+            return a.compare(other: b) == .orderedAscending
+        }
+        return countedItems
+    }
+    
+    func deleteCountedItem(countedItem: STCCountedItem) throws {
+        let z_pk = countedItem.z_pk
+        let usageCountedItem = Table("ZUSAGECOUNTEDITEM")
+        let Z_PK = Expression<Int>("Z_PK")
+        let query = usageCountedItem.filter(Z_PK == z_pk)
+        var deleteCount: Int?
+        do {
+            deleteCount = try self.database?.run(query.delete())
+        } catch {
+            throw STCDataModelError.deleteFail
+        }
+        if deleteCount ?? 0 == 0 {
+            throw STCDataModelError.entryNotFound
+        }
+    }
+    
+    func changeCountedItem(countedItem: STCCountedItem) throws {
+        let z_pk = countedItem.z_pk
+        let newNumberOfNotifications = countedItem.znumberofnotifications
+        let newNumberOfPickups = countedItem.znumberofpickups
+        let usageCountedItem = Table("ZUSAGECOUNTEDITEM")
+        let Z_PK = Expression<Int>("Z_PK")
+        let ZNUMBEROFNOTIFICATIONS = Expression<Int>("ZNUMBEROFNOTIFICATIONS")
+        let ZNUMBEROFPICKUPS = Expression<Int>("ZNUMBEROFPICKUPS")
+        let query = usageCountedItem.filter(Z_PK == z_pk)
+        do {
+            try self.database?.run(query.update([ZNUMBEROFNOTIFICATIONS <- newNumberOfNotifications, ZNUMBEROFPICKUPS <- newNumberOfPickups]))
         } catch {
             throw STCDataModelError.changeFail
         }

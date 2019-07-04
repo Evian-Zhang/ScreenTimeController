@@ -32,7 +32,7 @@ struct TimeItemRow : View {
 #if DEBUG
 struct ContentView_Previews : PreviewProvider {
     static var previews: some View {
-        ContentView(timeEntries: [STCTimedItem(z_pk: 0, ztotaltimeinseconds: 0, zblock: 0, zcategory: 0, zstartdate: Date()), STCTimedItem(z_pk: 0, ztotaltimeinseconds: 100, zblock: 0, zcategory: 0, zstartdate: Date())])
+        ContentView(countedItems: [STCTimedItem(z_pk: 0, ztotaltimeinseconds: 0, zblock: 0, zcategory: 0, zstartdate: Date()), STCTimedItem(z_pk: 0, ztotaltimeinseconds: 100, zblock: 0, zcategory: 0, zstartdate: Date())])
             .environment(\.colorScheme, .dark)
     }
 }

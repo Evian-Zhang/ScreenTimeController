@@ -18,6 +18,7 @@ enum STCDataModelError: Error {
     case installedAppTableNotFound
     case deviceStateTableNotFound
     case usageTableNotFound
+    case countedItemTableNotFound
     case entryNotFound
     case multipleUsers
     case deleteFail
@@ -44,6 +45,9 @@ extension Notification.Name {
     static let STCScreenTimeQueryStart = Notification.Name("STCScreenTimeQueryStart")
     static let STCScreenTimeDelete = Notification.Name("STCScreenTimeDelete")
     static let STCScreenTimeChange = Notification.Name("STCScreenTimeChange")
+    static let STCCountedItemQueryStart = Notification.Name("STCCountedItemQueryStart")
+    static let STCCountedItemDelete = Notification.Name("STCCountedItemDelete")
+    static let STCCountedItemChange = Notification.Name("STCCountedItemChange")
 }
 
 struct STCTimedItem {
@@ -54,6 +58,18 @@ struct STCTimedItem {
     var zstartdate: Date
     
     func compare(other: STCTimedItem) -> ComparisonResult {
+        return self.zstartdate.compare(other.zstartdate)
+    }
+}
+
+struct STCCountedItem {
+    var z_pk: Int
+    var znumberofnotifications: Int
+    var znumberofpickups: Int
+    var zblock: Int
+    var zstartdate: Date
+    
+    func compare(other: STCCountedItem) -> ComparisonResult {
         return self.zstartdate.compare(other.zstartdate)
     }
 }
@@ -95,7 +111,7 @@ class STCTimeUnit {
     }
     
     static func timeUnit(of value: Double) -> STCTimeUnit {
-        var timeUnit = STCTimeUnit()
+        let timeUnit = STCTimeUnit()
         timeUnit.hour = Int(value) / 60
         timeUnit.minute = Int(value) % 60
         timeUnit.second = Int((value - Double(Int(value))) * 60)
