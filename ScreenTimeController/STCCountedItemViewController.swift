@@ -326,7 +326,8 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
         let firstWeekRaw = countedItems.first?.zstartdate
         let calendar = Calendar.current
         let thisDay = calendar.startOfDay(for: firstWeekRaw!)
-        let firstWeek = calendar.date(bySetting: .weekday, value: 1, of: thisDay)
+        let currentDateComponents = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: thisDay)
+        let firstWeek = calendar.date(from: currentDateComponents)
         
         self.chartXEntries = Array<Date>()
         self.chartXEntries?.append(firstWeek!)

@@ -8,15 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		5653D3F222C85BC30090DBFA /* STCMainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5653D3F022C85BC30090DBFA /* STCMainWindowController.swift */; };
-		5653D3F322C85BC30090DBFA /* STCMainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5653D3F122C85BC30090DBFA /* STCMainWindowController.xib */; };
+		567ACC5E22CDE16500BF1E03 /* STCMainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 567ACC6022CDE16500BF1E03 /* STCMainWindowController.xib */; };
+		567ACC6322CDE16E00BF1E03 /* STCConnectingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 567ACC6522CDE16E00BF1E03 /* STCConnectingViewController.xib */; };
+		567ACC6822CDE17A00BF1E03 /* STCDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 567ACC6A22CDE17A00BF1E03 /* STCDataViewController.xib */; };
+		567ACC6D22CDE18200BF1E03 /* STCScreenTimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 567ACC6F22CDE18200BF1E03 /* STCScreenTimeViewController.xib */; };
+		567ACC7222CDE18B00BF1E03 /* STCCountedItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 567ACC7422CDE18B00BF1E03 /* STCCountedItemViewController.xib */; };
+		567ACC8222CDE87100BF1E03 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 567ACC8422CDE87100BF1E03 /* Localizable.strings */; };
 		569189C622C8874000CC6A7E /* STCConnectingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569189C422C8874000CC6A7E /* STCConnectingViewController.swift */; };
-		569189C722C8874000CC6A7E /* STCConnectingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 569189C522C8874000CC6A7E /* STCConnectingViewController.xib */; };
 		569189CA22C88F7B00CC6A7E /* STCDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569189C822C88F7B00CC6A7E /* STCDataViewController.swift */; };
-		569189CB22C88F7B00CC6A7E /* STCDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 569189C922C88F7B00CC6A7E /* STCDataViewController.xib */; };
 		569189CE22C8914F00CC6A7E /* STCScreenTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569189CC22C8914F00CC6A7E /* STCScreenTimeViewController.swift */; };
-		569189CF22C8914F00CC6A7E /* STCScreenTimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 569189CD22C8914F00CC6A7E /* STCScreenTimeViewController.xib */; };
 		56990BD422CD9D2B00B3217B /* STCCountedItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56990BD222CD9D2B00B3217B /* STCCountedItemViewController.swift */; };
-		56990BD522CD9D2B00B3217B /* STCCountedItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56990BD322CD9D2B00B3217B /* STCCountedItemViewController.xib */; };
 		56D9B8D922C261A300E7D058 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9B8D822C261A300E7D058 /* AppDelegate.swift */; };
 		56D9B8DD22C261A700E7D058 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D9B8DC22C261A700E7D058 /* Assets.xcassets */; };
 		56D9B8E022C261A700E7D058 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D9B8DF22C261A700E7D058 /* Preview Assets.xcassets */; };
@@ -61,15 +62,22 @@
 
 /* Begin PBXFileReference section */
 		5653D3F022C85BC30090DBFA /* STCMainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCMainWindowController.swift; sourceTree = "<group>"; };
-		5653D3F122C85BC30090DBFA /* STCMainWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STCMainWindowController.xib; sourceTree = "<group>"; };
+		567ACC5D22CDD9C500BF1E03 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		567ACC5F22CDE16500BF1E03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/STCMainWindowController.xib; sourceTree = "<group>"; };
+		567ACC6222CDE16A00BF1E03 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/STCMainWindowController.strings"; sourceTree = "<group>"; };
+		567ACC6422CDE16E00BF1E03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/STCConnectingViewController.xib; sourceTree = "<group>"; };
+		567ACC6722CDE17500BF1E03 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/STCConnectingViewController.strings"; sourceTree = "<group>"; };
+		567ACC6922CDE17A00BF1E03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/STCDataViewController.xib; sourceTree = "<group>"; };
+		567ACC6C22CDE17E00BF1E03 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/STCDataViewController.strings"; sourceTree = "<group>"; };
+		567ACC6E22CDE18200BF1E03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/STCScreenTimeViewController.xib; sourceTree = "<group>"; };
+		567ACC7122CDE18800BF1E03 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/STCScreenTimeViewController.strings"; sourceTree = "<group>"; };
+		567ACC7322CDE18B00BF1E03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/STCCountedItemViewController.xib; sourceTree = "<group>"; };
+		567ACC7622CDE19000BF1E03 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/STCCountedItemViewController.strings"; sourceTree = "<group>"; };
+		567ACC8322CDE87100BF1E03 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		569189C422C8874000CC6A7E /* STCConnectingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCConnectingViewController.swift; sourceTree = "<group>"; };
-		569189C522C8874000CC6A7E /* STCConnectingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STCConnectingViewController.xib; sourceTree = "<group>"; };
 		569189C822C88F7B00CC6A7E /* STCDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCDataViewController.swift; sourceTree = "<group>"; };
-		569189C922C88F7B00CC6A7E /* STCDataViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STCDataViewController.xib; sourceTree = "<group>"; };
 		569189CC22C8914F00CC6A7E /* STCScreenTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCScreenTimeViewController.swift; sourceTree = "<group>"; };
-		569189CD22C8914F00CC6A7E /* STCScreenTimeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STCScreenTimeViewController.xib; sourceTree = "<group>"; };
 		56990BD222CD9D2B00B3217B /* STCCountedItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCCountedItemViewController.swift; sourceTree = "<group>"; };
-		56990BD322CD9D2B00B3217B /* STCCountedItemViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STCCountedItemViewController.xib; sourceTree = "<group>"; };
 		56D9B8D522C261A300E7D058 /* ScreenTimeController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenTimeController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56D9B8D822C261A300E7D058 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56D9B8DC22C261A700E7D058 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -118,19 +126,20 @@
 		56D9B8D722C261A300E7D058 /* ScreenTimeController */ = {
 			isa = PBXGroup;
 			children = (
+				567ACC8422CDE87100BF1E03 /* Localizable.strings */,
 				56D9B8D822C261A300E7D058 /* AppDelegate.swift */,
 				56E88E5622C4C3E60012125D /* STCDataModel.swift */,
 				56E88E5822C4CEEA0012125D /* STCHeader.swift */,
 				5653D3F022C85BC30090DBFA /* STCMainWindowController.swift */,
-				5653D3F122C85BC30090DBFA /* STCMainWindowController.xib */,
+				567ACC6022CDE16500BF1E03 /* STCMainWindowController.xib */,
 				569189C422C8874000CC6A7E /* STCConnectingViewController.swift */,
-				569189C522C8874000CC6A7E /* STCConnectingViewController.xib */,
+				567ACC6522CDE16E00BF1E03 /* STCConnectingViewController.xib */,
 				569189C822C88F7B00CC6A7E /* STCDataViewController.swift */,
-				569189C922C88F7B00CC6A7E /* STCDataViewController.xib */,
+				567ACC6A22CDE17A00BF1E03 /* STCDataViewController.xib */,
 				569189CC22C8914F00CC6A7E /* STCScreenTimeViewController.swift */,
-				569189CD22C8914F00CC6A7E /* STCScreenTimeViewController.xib */,
+				567ACC6F22CDE18200BF1E03 /* STCScreenTimeViewController.xib */,
 				56990BD222CD9D2B00B3217B /* STCCountedItemViewController.swift */,
-				56990BD322CD9D2B00B3217B /* STCCountedItemViewController.xib */,
+				567ACC7422CDE18B00BF1E03 /* STCCountedItemViewController.xib */,
 				56D9B8DC22C261A700E7D058 /* Assets.xcassets */,
 				56D9B8E122C261A700E7D058 /* Main.storyboard */,
 				56D9B8E422C261A700E7D058 /* Info.plist */,
@@ -210,6 +219,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 56D9B8CC22C261A300E7D058;
 			packageReferences = (
@@ -253,13 +263,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				56D9B8E322C261A700E7D058 /* Main.storyboard in Resources */,
-				569189C722C8874000CC6A7E /* STCConnectingViewController.xib in Resources */,
+				567ACC6322CDE16E00BF1E03 /* STCConnectingViewController.xib in Resources */,
 				56D9B8E022C261A700E7D058 /* Preview Assets.xcassets in Resources */,
-				569189CF22C8914F00CC6A7E /* STCScreenTimeViewController.xib in Resources */,
+				567ACC6D22CDE18200BF1E03 /* STCScreenTimeViewController.xib in Resources */,
+				567ACC8222CDE87100BF1E03 /* Localizable.strings in Resources */,
 				56D9B8DD22C261A700E7D058 /* Assets.xcassets in Resources */,
-				5653D3F322C85BC30090DBFA /* STCMainWindowController.xib in Resources */,
-				56990BD522CD9D2B00B3217B /* STCCountedItemViewController.xib in Resources */,
-				569189CB22C88F7B00CC6A7E /* STCDataViewController.xib in Resources */,
+				567ACC5E22CDE16500BF1E03 /* STCMainWindowController.xib in Resources */,
+				567ACC7222CDE18B00BF1E03 /* STCCountedItemViewController.xib in Resources */,
+				567ACC6822CDE17A00BF1E03 /* STCDataViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,10 +295,64 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		567ACC6022CDE16500BF1E03 /* STCMainWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				567ACC5F22CDE16500BF1E03 /* Base */,
+				567ACC6222CDE16A00BF1E03 /* zh-Hans */,
+			);
+			name = STCMainWindowController.xib;
+			sourceTree = "<group>";
+		};
+		567ACC6522CDE16E00BF1E03 /* STCConnectingViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				567ACC6422CDE16E00BF1E03 /* Base */,
+				567ACC6722CDE17500BF1E03 /* zh-Hans */,
+			);
+			name = STCConnectingViewController.xib;
+			sourceTree = "<group>";
+		};
+		567ACC6A22CDE17A00BF1E03 /* STCDataViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				567ACC6922CDE17A00BF1E03 /* Base */,
+				567ACC6C22CDE17E00BF1E03 /* zh-Hans */,
+			);
+			name = STCDataViewController.xib;
+			sourceTree = "<group>";
+		};
+		567ACC6F22CDE18200BF1E03 /* STCScreenTimeViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				567ACC6E22CDE18200BF1E03 /* Base */,
+				567ACC7122CDE18800BF1E03 /* zh-Hans */,
+			);
+			name = STCScreenTimeViewController.xib;
+			sourceTree = "<group>";
+		};
+		567ACC7422CDE18B00BF1E03 /* STCCountedItemViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				567ACC7322CDE18B00BF1E03 /* Base */,
+				567ACC7622CDE19000BF1E03 /* zh-Hans */,
+			);
+			name = STCCountedItemViewController.xib;
+			sourceTree = "<group>";
+		};
+		567ACC8422CDE87100BF1E03 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				567ACC8322CDE87100BF1E03 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		56D9B8E122C261A700E7D058 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				56D9B8E222C261A700E7D058 /* Base */,
+				567ACC5D22CDD9C500BF1E03 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -299,6 +364,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -359,6 +425,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

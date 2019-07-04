@@ -1,0 +1,39 @@
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "0Bj-Xv-Nsd"; */
+"0Bj-Xv-Nsd.title" = "Text Cell";
+
+/* Class = "NSTableColumn"; headerCell.title = "notifications"; ObjectID = "7jk-Wb-amM"; */
+"7jk-Wb-amM.headerCell.title" = "通知";
+
+/* Class = "NSTableColumn"; headerCell.title = "pick ups"; ObjectID = "9YW-z1-IHQ"; */
+"9YW-z1-IHQ.headerCell.title" = "拿起次数";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "Fxz-7x-DS7"; */
+"Fxz-7x-DS7.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "Gzy-FW-z4v"; */
+"Gzy-FW-z4v.title" = "Table View Cell";
+
+/* Class = "NSMenuItem"; title = "Delete"; ObjectID = "Ogo-ry-EOM"; */
+"Ogo-ry-EOM.title" = "删除";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "QI8-6Z-y4f"; */
+"QI8-6Z-y4f.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "since"; ObjectID = "lmT-xu-xWC"; */
+"lmT-xu-xWC.title" = "自";
+
+/* Class = "NSTableColumn"; headerCell.title = "start time"; ObjectID = "nck-xL-LyN"; */
+"nck-xL-LyN.headerCell.title" = "开始时间";
+
+/* Class = "NSButtonCell"; title = "query"; ObjectID = "p9d-yC-7pB"; */
+"p9d-yC-7pB.title" = "查询";
+
+/* Class = "NSTextFieldCell"; title = "to"; ObjectID = "rmS-et-NaT"; */
+"rmS-et-NaT.title" = "至";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "waN-yQ-ndX"; */
+"waN-yQ-ndX.title" = "Table View Cell";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "ztk-EN-vEU"; */
+"ztk-EN-vEU.title" = "Table View Cell";

@@ -1,0 +1,6 @@
+
+/* Class = "NSTabViewItem"; label = "Screen Time"; ObjectID = "Mkj-3k-8el"; */
+"Mkj-3k-8el.label" = "屏幕使用时间";
+
+/* Class = "NSTabViewItem"; label = "Notifications and Pick up times"; ObjectID = "yOK-Af-aWC"; */
+"yOK-Af-aWC.label" = "通知和拿起次数";

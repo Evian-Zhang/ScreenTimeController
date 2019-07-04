@@ -1,0 +1,6 @@
+
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "9AE-Db-Bg5"; */
+"9AE-Db-Bg5.title" = "好";
+
+/* Class = "NSTextFieldCell"; title = "Connecting to database ..."; ObjectID = "zOF-Sw-hzY"; */
+"zOF-Sw-hzY.title" = "正在连接数据库……";

@@ -24,8 +24,8 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView misplaced="YES" id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="654" height="649"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="653" height="649"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DCr-u4-zeW">
@@ -98,15 +98,15 @@ DQ
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <splitView arrangesAllSubviews="NO" dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="rVR-qT-v2h">
+                <splitView arrangesAllSubviews="NO" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="rVR-qT-v2h">
                     <rect key="frame" x="20" y="61" width="613" height="515"/>
                     <subviews>
                         <customView misplaced="YES" id="5dM-k7-Bp5">
-                            <rect key="frame" x="0.0" y="0.0" width="613" height="246"/>
+                            <rect key="frame" x="0.0" y="0.0" width="613" height="250"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <scrollView misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l8s-FJ-7Uo">
-                                    <rect key="frame" x="0.0" y="-21" width="613" height="267"/>
+                                    <rect key="frame" x="0.0" y="-17" width="613" height="267"/>
                                     <clipView key="contentView" id="Xda-lf-VdL">
                                         <rect key="frame" x="1" y="0.0" width="611" height="266"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -224,7 +224,7 @@ DQ
                             </constraints>
                         </customView>
                         <customView fixedFrame="YES" id="RZC-lS-Hx8" customClass="BarChartView" customModule="Charts">
-                            <rect key="frame" x="0.0" y="256" width="613" height="259"/>
+                            <rect key="frame" x="0.0" y="251" width="613" height="264"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </customView>
                     </subviews>

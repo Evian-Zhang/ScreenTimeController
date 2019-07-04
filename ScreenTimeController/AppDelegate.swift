@@ -15,6 +15,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow!
     
     var mainWindowController: STCMainWindowController?
+    
+    @IBOutlet var checkForUpdatesMenuItem: NSMenuItem?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -32,6 +34,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.window.center()
         self.window.makeKeyAndOrderFront(nil)
         self.mainWindowController?.windowDidFirstDisplay()
+        
+        self.checkForUpdatesMenuItem?.target = self
+        self.checkForUpdatesMenuItem?.action = #selector(checkForUpdatesHandler)
         
 //        let dataModel = STCDataModel()
 //        do {
@@ -67,6 +72,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //                print("unknown fail!")
 //            }
 //        } catch {}
+    }
+    
+    @objc func checkForUpdatesHandler() {
+        NSWorkspace.shared.open(URL(string: "https://github.com/Evian-Zhang/ScreenTimeController")!)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

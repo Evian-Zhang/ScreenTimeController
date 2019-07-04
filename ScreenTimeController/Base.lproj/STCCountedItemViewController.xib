@@ -110,21 +110,21 @@ DQ
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <splitView arrangesAllSubviews="NO" dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="BsI-gq-y2h">
+                <splitView arrangesAllSubviews="NO" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="BsI-gq-y2h">
                     <rect key="frame" x="20" y="57" width="615" height="552"/>
                     <subviews>
-                        <customView misplaced="YES" id="7Ei-zX-db8">
-                            <rect key="frame" x="0.0" y="0.0" width="615" height="264"/>
+                        <customView id="7Ei-zX-db8">
+                            <rect key="frame" x="0.0" y="0.0" width="615" height="268"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aVc-IZ-Zcl">
-                                    <rect key="frame" x="0.0" y="0.0" width="615" height="114"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="615" height="268"/>
                                     <clipView key="contentView" id="L5u-cl-u2q">
-                                        <rect key="frame" x="1" y="0.0" width="613" height="113"/>
+                                        <rect key="frame" x="1" y="0.0" width="613" height="267"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="YCO-IT-QdU" viewBased="YES" id="1sL-A7-dMm">
-                                                <rect key="frame" x="0.0" y="0.0" width="613" height="88"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="613" height="242"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -258,7 +258,7 @@ DQ
                                         <rect key="frame" x="1" y="248" width="613" height="15"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
-                                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="PlQ-cJ-6Vo">
+                                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="PlQ-cJ-6Vo">
                                         <rect key="frame" x="224" y="17" width="15" height="102"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
@@ -276,7 +276,7 @@ DQ
                             </constraints>
                         </customView>
                         <customView fixedFrame="YES" id="YW2-HL-omL" customClass="CombinedChartView" customModule="Charts">
-                            <rect key="frame" x="0.0" y="274" width="615" height="278"/>
+                            <rect key="frame" x="0.0" y="269" width="615" height="283"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </customView>
                     </subviews>

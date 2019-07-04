@@ -99,13 +99,16 @@ class STCTimeUnit {
     func stringValue() -> String {
         var description = ""
         if self.hour > 0 {
-            description += NSLocalizedString(String(format: "%dh", self.hour), comment: "")
+            let format = NSLocalizedString("%dh", comment: "")
+            description += String.localizedStringWithFormat(format, self.hour)
         }
         if !((self.hour == 0 || self.second == 0) && self.minute == 0) {
-            description += NSLocalizedString(String(format: "%dm", self.minute), comment: "")
+            let format = NSLocalizedString("%dm", comment: "")
+            description += String.localizedStringWithFormat(format, self.minute)
         }
         if !((self.hour != 0 || self.minute != 0) && self.second == 0) {
-            description += NSLocalizedString(String(format: "%ds", self.second), comment: "")
+            let format = NSLocalizedString("%ds", comment: "")
+            description += String.localizedStringWithFormat(format, self.second)
         }
         return description
     }
