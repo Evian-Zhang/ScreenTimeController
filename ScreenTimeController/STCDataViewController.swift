@@ -71,15 +71,15 @@ class STCDataViewController: NSViewController, NSTabViewDelegate {
     // MARK: transferrer for counted item
     func transferCountedItem(countedItems: Array<STCCountedItem>) {
         DispatchQueue.main.async {
-            if self.currentTabIndex == 0 {
-                self.countedItemViewController.readTimeEntries(countedItems: countedItems)
+            if self.currentTabIndex == 1 {
+                self.countedItemViewController.readCountedItems(countedItems: countedItems)
             }
         }
     }
     
     func transferCountedItemError(error: STCDataModelError) {
         DispatchQueue.main.async {
-            if self.currentTabIndex == 0 {
+            if self.currentTabIndex == 1 {
                 self.countedItemViewController.queryFailed(with: error)
             }
         }

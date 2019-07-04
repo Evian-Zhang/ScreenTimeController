@@ -20,17 +20,19 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
     @IBOutlet var countedItemTable: NSTableView?
     @IBOutlet var tableMenu: NSMenu?
     @IBOutlet var deleteMenuItem: NSMenuItem?
-    @IBOutlet var barChartView: BarChartView?
+    @IBOutlet var combinedChartView: CombinedChartView?
     @IBOutlet var chartDisplayPopUpButton: NSPopUpButton?
 
     var countedItems: Array<STCCountedItem>?
     var chartXEntries: Array<Date>?
-    var chartYEntries: Array<STCTimeUnit>?
+    var notificationEntries: Array<Int>?
+    var pickupEntries: Array<Int>?
     var currentDisplayUnit = STCDisplayUnit.day
     
     let barWidth = 0.4
     let barSpace = 0.05
     let barChartDataSetColor = NSColor.red
+    let lineChartDataSetColor = NSColor.yellow
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,19 +56,19 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
         self.deleteMenuItem?.target = self
         self.deleteMenuItem?.action = #selector(deleteItemHandler)
         
-        self.barChartView?.doubleTapToZoomEnabled = false
-        self.barChartView?.highlightPerTapEnabled = false
-        self.barChartView?.gridBackgroundColor = .white
-        self.barChartView?.legend.enabled = false
-        self.barChartView?.xAxis.labelPosition = .bottom
-        self.barChartView?.xAxis.valueFormatter = self
-        self.barChartView?.xAxis.labelTextColor = .textColor
-        self.barChartView?.leftAxis.valueFormatter = self
-        self.barChartView?.leftAxis.labelTextColor = .textColor
-        self.barChartView?.rightAxis.valueFormatter = self
-        self.barChartView?.rightAxis.labelTextColor = .textColor
-        self.barChartView?.noDataTextColor = .textColor
-        self.barChartView?.noDataText = NSLocalizedString("No data Available", comment: "")
+        self.combinedChartView?.doubleTapToZoomEnabled = false
+        self.combinedChartView?.highlightPerTapEnabled = false
+        self.combinedChartView?.gridBackgroundColor = .white
+        self.combinedChartView?.legend.enabled = false
+        self.combinedChartView?.xAxis.labelPosition = .bottom
+        self.combinedChartView?.xAxis.valueFormatter = self
+        self.combinedChartView?.xAxis.labelTextColor = .textColor
+        self.combinedChartView?.leftAxis.valueFormatter = self
+        self.combinedChartView?.leftAxis.labelTextColor = .textColor
+        self.combinedChartView?.rightAxis.valueFormatter = self
+        self.combinedChartView?.rightAxis.labelTextColor = .textColor
+        self.combinedChartView?.noDataTextColor = .textColor
+        self.combinedChartView?.noDataText = NSLocalizedString("No data Available", comment: "")
     }
     
     func processChartData(countedItems: Array<STCCountedItem>) {
@@ -92,19 +94,33 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
     }
     
     func processChart() {
-        var barChartDataEntries = Array<BarChartDataEntry>()
-        for index in 0 ..< (self.chartYEntries?.count)! {
-            barChartDataEntries.append(BarChartDataEntry(x: Double(index), y: self.chartYEntries![index].doubleValue()))
+        var notificationDataEntries = Array<BarChartDataEntry>()
+        var pickupDataEntries = Array<ChartDataEntry>()
+        for index in 0 ..< (self.notificationEntries?.count)! {
+            notificationDataEntries.append(BarChartDataEntry(x: Double(index), y: Double(self.notificationEntries![index])))
+            pickupDataEntries.append(ChartDataEntry(x: Double(index), y:  Double(self.pickupEntries![index])))
         }
         let barChartData = BarChartData()
-        let barChartDataSet = BarChartDataSet(entries: barChartDataEntries)
-        barChartDataSet.colors = [self.barChartDataSetColor]
-        barChartData.addDataSet(barChartDataSet)
-        
+        let notificationDataSet = BarChartDataSet(entries: notificationDataEntries)
+        notificationDataSet.colors = [self.barChartDataSetColor]
+        barChartData.addDataSet(notificationDataSet)
         barChartData.barWidth = self.barWidth
         barChartData.setValueFormatter(self)
         barChartData.setValueTextColor(.textColor)
-        self.barChartView?.data = barChartData
+        
+        let lineChartData = LineChartData()
+        let pickupDataSet = LineChartDataSet(entries: pickupDataEntries)
+        pickupDataSet.colors = [self.lineChartDataSetColor]
+        pickupDataSet.fillColor = self.lineChartDataSetColor
+        lineChartData.addDataSet(pickupDataSet)
+        lineChartData.setValueFormatter(self)
+        lineChartData.setValueTextColor(.textColor)
+        
+        let combinedChartData = CombinedChartData()
+        combinedChartData.barData = barChartData
+        combinedChartData.lineData = lineChartData
+        
+        self.combinedChartView?.data = combinedChartData
     }
     
     func canQuery() -> (Bool, String?) {
@@ -148,7 +164,7 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
             if countedItem.count > 0 {
                 self.processChartData(countedItems: countedItem)
                 self.processChart()
-                self.barChartView?.needsDisplay = true
+                self.combinedChartView?.needsDisplay = true
             }
         }
     }
@@ -226,139 +242,174 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
     }
     
     // MARK: process chart data
-    func prepareForHour(of timeEntries: Array<STCTimedItem>) {
-        if (timeEntries.count == 0) {
+    func prepareForHour(of countedItems: Array<STCCountedItem>) {
+        if (countedItems.count == 0) {
             return
         }
         
-        let firstHourRaw = (timeEntries.first?.zstartdate)!
+        let firstHourRaw = (countedItems.first?.zstartdate)!
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour], from: firstHourRaw)
         let firstHour = calendar.date(from: components)
         self.chartXEntries = Array<Date>()
         self.chartXEntries?.append(firstHour!)
-        self.chartYEntries = Array<STCTimeUnit>()
-        self.chartYEntries?.append(STCTimeUnit())
+        self.notificationEntries = Array<Int>()
+        self.notificationEntries?.append(0)
+        self.pickupEntries = Array<Int>()
+        self.pickupEntries?.append(0)
         var index = 0
-        while index < timeEntries.count {
-            let thisEntry = timeEntries[index]
+        while index < countedItems.count {
+            let thisEntry = countedItems[index]
             let nextUnit = calendar.date(byAdding: .hour, value: 1, to: (self.chartXEntries?.last)!)!
             if thisEntry.zstartdate.compare(nextUnit) == .orderedAscending {
-                self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
+                let lastNotificationValue = self.notificationEntries?.popLast()
+                self.notificationEntries?.append((lastNotificationValue ?? 0) + thisEntry.znumberofnotifications)
+                
+                let lastPickupValue = self.pickupEntries?.popLast()
+                self.pickupEntries?.append((lastPickupValue ?? 0) + thisEntry.znumberofpickups)
                 index += 1
             } else {
                 self.chartXEntries?.append(nextUnit)
-                self.chartYEntries?.append(STCTimeUnit())
+                self.notificationEntries?.append(0)
+                self.pickupEntries?.append(0)
             }
         }
     }
     
-    func prepareForDay(of timeEntries: Array<STCTimedItem>) {
-        if (timeEntries.count == 0) {
+    func prepareForDay(of countedItems: Array<STCCountedItem>) {
+        if (countedItems.count == 0) {
             return
         }
         
-        let firstDateRaw = timeEntries.first?.zstartdate
+        let firstDateRaw = countedItems.first?.zstartdate
         let calendar = Calendar.current
         let firstDate = calendar.startOfDay(for: firstDateRaw ?? Date())
         self.chartXEntries = Array<Date>()
         self.chartXEntries?.append(firstDate)
-        self.chartYEntries = Array<STCTimeUnit>()
-        self.chartYEntries?.append(STCTimeUnit())
+        self.notificationEntries = Array<Int>()
+        self.notificationEntries?.append(0)
+        self.pickupEntries = Array<Int>()
+        self.pickupEntries?.append(0)
         var index = 0
-        while index < timeEntries.count {
-            let thisEntry = timeEntries[index]
+        while index < countedItems.count {
+            let thisEntry = countedItems[index]
             let nextUnit = calendar.date(byAdding: .day, value: 1, to: (self.chartXEntries?.last)!)!
             if thisEntry.zstartdate.compare(nextUnit) == .orderedAscending {
-                self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
+                let lastNotificationValue = self.notificationEntries?.popLast()
+                self.notificationEntries?.append((lastNotificationValue ?? 0) + thisEntry.znumberofnotifications)
+                
+                let lastPickupValue = self.pickupEntries?.popLast()
+                self.pickupEntries?.append((lastPickupValue ?? 0) + thisEntry.znumberofpickups)
                 index += 1
             } else {
                 self.chartXEntries?.append(nextUnit)
-                self.chartYEntries?.append(STCTimeUnit())
+                self.notificationEntries?.append(0)
+                self.pickupEntries?.append(0)
             }
         }
     }
     
-    func prepareForWeek(of timeEntries: Array<STCTimedItem>) {
-        if (timeEntries.count == 0) {
+    func prepareForWeek(of countedItems: Array<STCCountedItem>) {
+        if (countedItems.count == 0) {
             return
         }
         
-        let firstWeekRaw = timeEntries.first?.zstartdate
+        let firstWeekRaw = countedItems.first?.zstartdate
         let calendar = Calendar.current
         let thisDay = calendar.startOfDay(for: firstWeekRaw!)
         let firstWeek = calendar.date(bySetting: .weekday, value: 1, of: thisDay)
         
         self.chartXEntries = Array<Date>()
         self.chartXEntries?.append(firstWeek!)
-        self.chartYEntries = Array<STCTimeUnit>()
-        self.chartYEntries?.append(STCTimeUnit())
+        self.notificationEntries = Array<Int>()
+        self.notificationEntries?.append(0)
+        self.pickupEntries = Array<Int>()
+        self.pickupEntries?.append(0)
         var index = 0
-        while index < timeEntries.count {
-            let thisEntry = timeEntries[index]
+        while index < countedItems.count {
+            let thisEntry = countedItems[index]
             let nextUnit = calendar.date(byAdding: .weekOfYear, value: 1, to: (self.chartXEntries?.last)!)!
             if thisEntry.zstartdate.compare(nextUnit) == .orderedAscending {
-                self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
+                let lastNotificationValue = self.notificationEntries?.popLast()
+                self.notificationEntries?.append((lastNotificationValue ?? 0) + thisEntry.znumberofnotifications)
+                
+                let lastPickupValue = self.pickupEntries?.popLast()
+                self.pickupEntries?.append((lastPickupValue ?? 0) + thisEntry.znumberofpickups)
                 index += 1
             } else {
                 self.chartXEntries?.append(nextUnit)
-                self.chartYEntries?.append(STCTimeUnit())
+                self.notificationEntries?.append(0)
+                self.pickupEntries?.append(0)
             }
         }
     }
     
-    func prepareForMonth(of timeEntries: Array<STCTimedItem>) {
-        if (timeEntries.count == 0) {
+    func prepareForMonth(of countedItems: Array<STCCountedItem>) {
+        if (countedItems.count == 0) {
             return
         }
         
-        let firstMonthRaw = timeEntries.first?.zstartdate
+        let firstMonthRaw = countedItems.first?.zstartdate
         let calendar = Calendar.current
         let thisDay = calendar.startOfDay(for: firstMonthRaw!)
         let firstMonth = calendar.date(bySetting: .day, value: 1, of: thisDay)
         
         self.chartXEntries = Array<Date>()
         self.chartXEntries?.append(firstMonth!)
-        self.chartYEntries = Array<STCTimeUnit>()
-        self.chartYEntries?.append(STCTimeUnit())
+        self.notificationEntries = Array<Int>()
+        self.notificationEntries?.append(0)
+        self.pickupEntries = Array<Int>()
+        self.pickupEntries?.append(0)
         var index = 0
-        while index < timeEntries.count {
-            let thisEntry = timeEntries[index]
+        while index < countedItems.count {
+            let thisEntry = countedItems[index]
             let nextUnit = calendar.date(byAdding: .month, value: 1, to: (self.chartXEntries?.last)!)!
             if thisEntry.zstartdate.compare(nextUnit) == .orderedAscending {
-                self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
+                let lastNotificationValue = self.notificationEntries?.popLast()
+                self.notificationEntries?.append((lastNotificationValue ?? 0) + thisEntry.znumberofnotifications)
+                
+                let lastPickupValue = self.pickupEntries?.popLast()
+                self.pickupEntries?.append((lastPickupValue ?? 0) + thisEntry.znumberofpickups)
                 index += 1
             } else {
                 self.chartXEntries?.append(nextUnit)
-                self.chartYEntries?.append(STCTimeUnit())
+                self.notificationEntries?.append(0)
+                self.pickupEntries?.append(0)
             }
         }
     }
     
-    func prepareForYear(of timeEntries: Array<STCTimedItem>) {
-        if (timeEntries.count == 0) {
+    func prepareForYear(of countedItems: Array<STCCountedItem>) {
+        if (countedItems.count == 0) {
             return
         }
         
-        let firstYearRaw = timeEntries.first?.zstartdate
+        let firstYearRaw = countedItems.first?.zstartdate
         let calendar = Calendar.current
         let thisDay = calendar.startOfDay(for: firstYearRaw!)
         let firstYear = calendar.date(from: calendar.dateComponents([.year], from: thisDay))
         
         self.chartXEntries = Array<Date>()
         self.chartXEntries?.append(firstYear!)
-        self.chartYEntries = Array<STCTimeUnit>()
-        self.chartYEntries?.append(STCTimeUnit())
+        self.notificationEntries = Array<Int>()
+        self.notificationEntries?.append(0)
+        self.pickupEntries = Array<Int>()
+        self.pickupEntries?.append(0)
         var index = 0
-        while index < timeEntries.count {
-            let thisEntry = timeEntries[index]
+        while index < countedItems.count {
+            let thisEntry = countedItems[index]
             let nextUnit = calendar.date(byAdding: .year, value: 1, to: (self.chartXEntries?.last)!)!
             if thisEntry.zstartdate.compare(nextUnit) == .orderedAscending {
-                self.chartYEntries?.last?.addSecond(second: thisEntry.ztotaltimeinseconds)
+                let lastNotificationValue = self.notificationEntries?.popLast()
+                self.notificationEntries?.append((lastNotificationValue ?? 0) + thisEntry.znumberofnotifications)
+                
+                let lastPickupValue = self.pickupEntries?.popLast()
+                self.pickupEntries?.append((lastPickupValue ?? 0) + thisEntry.znumberofpickups)
                 index += 1
             } else {
                 self.chartXEntries?.append(nextUnit)
-                self.chartYEntries?.append(STCTimeUnit())
+                self.notificationEntries?.append(0)
+                self.pickupEntries?.append(0)
             }
         }
     }
@@ -501,14 +552,14 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
                 
                 if current != previous {
                     changingItem.znumberofnotifications = current
-                    NotificationCenter.default.post(name: .STCScreenTimeChange, object: nil, userInfo: ["changingItem": changingItem, "index": row!])
+                    NotificationCenter.default.post(name: .STCCountedItemChange, object: nil, userInfo: ["changingItem": changingItem, "index": row!])
                 }
             } else if column == 2 {
                 previous = changingItem.znumberofpickups
                 
                 if current != previous {
                     changingItem.znumberofpickups = current
-                    NotificationCenter.default.post(name: .STCScreenTimeChange, object: nil, userInfo: ["changingItem": changingItem, "index": row!])
+                    NotificationCenter.default.post(name: .STCCountedItemChange, object: nil, userInfo: ["changingItem": changingItem, "index": row!])
                 }
             }
         }
@@ -523,6 +574,7 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
         let column = self.countedItemTable?.column(for: control)
         alert.runModal()
         if row ?? -1 >= 0 && column ?? -1 >= 0 {
+            var changingItem = self.countedItems![row!]
             var previous = 0
             if column == 1 {
                 previous = changingItem.znumberofnotifications
@@ -538,7 +590,7 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
     
     // MARK: conform to IValueFormatter
     func stringForValue(_ value: Double, entry: ChartDataEntry, dataSetIndex: Int, viewPortHandler: ViewPortHandler?) -> String {
-        return STCTimeUnit.timeUnit(of: value).stringValue()
+        return String(Int(value))
     }
     
     // MARK: conform to IAxisValueFormatter
@@ -565,7 +617,7 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
             return formatter.string(from: self.chartXEntries![Int(value)])
         }
         if (axis as? YAxis) != nil {
-            return STCTimeUnit.timeUnit(of: value).stringValue()
+            return String(Int(value))
         }
         return ""
     }

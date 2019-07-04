@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14810.12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14835.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14810.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14835.7"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="STCCountedItemViewController" customModule="ScreenTimeController" customModuleProvider="target">
             <connections>
-                <outlet property="barChartView" destination="YW2-HL-omL" id="gP6-sq-LAE"/>
                 <outlet property="chartDisplayPopUpButton" destination="8aA-Ku-aSc" id="hw8-Hi-hBX"/>
+                <outlet property="combinedChartView" destination="YW2-HL-omL" id="5CT-lL-ewf"/>
                 <outlet property="contentField" destination="glg-T8-maS" id="qbO-EO-BLC"/>
                 <outlet property="countedItemTable" destination="1sL-A7-dMm" id="C7N-fs-sdQ"/>
                 <outlet property="deleteMenuItem" destination="Ogo-ry-EOM" id="OO5-DF-OLb"/>
@@ -113,18 +113,18 @@ DQ
                 <splitView arrangesAllSubviews="NO" dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="BsI-gq-y2h">
                     <rect key="frame" x="20" y="57" width="615" height="552"/>
                     <subviews>
-                        <customView id="7Ei-zX-db8">
+                        <customView misplaced="YES" id="7Ei-zX-db8">
                             <rect key="frame" x="0.0" y="0.0" width="615" height="264"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <scrollView misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aVc-IZ-Zcl">
-                                    <rect key="frame" x="0.0" y="0.0" width="615" height="264"/>
+                                <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aVc-IZ-Zcl">
+                                    <rect key="frame" x="0.0" y="0.0" width="615" height="139"/>
                                     <clipView key="contentView" id="L5u-cl-u2q">
-                                        <rect key="frame" x="1" y="0.0" width="613" height="263"/>
+                                        <rect key="frame" x="1" y="0.0" width="613" height="138"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="YCO-IT-QdU" viewBased="YES" id="1sL-A7-dMm">
-                                                <rect key="frame" x="0.0" y="0.0" width="613" height="238"/>
+                                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="YCO-IT-QdU" viewBased="YES" id="1sL-A7-dMm">
+                                                <rect key="frame" x="0.0" y="0.0" width="613" height="113"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -269,11 +269,13 @@ DQ
                                 </scrollView>
                             </subviews>
                             <constraints>
+                                <constraint firstAttribute="trailing" secondItem="aVc-IZ-Zcl" secondAttribute="trailing" id="1la-ID-NyU"/>
                                 <constraint firstItem="aVc-IZ-Zcl" firstAttribute="leading" secondItem="7Ei-zX-db8" secondAttribute="leading" id="RSX-KJ-kic"/>
                                 <constraint firstItem="aVc-IZ-Zcl" firstAttribute="top" secondItem="7Ei-zX-db8" secondAttribute="top" id="jvn-vF-Viz"/>
+                                <constraint firstAttribute="bottom" secondItem="aVc-IZ-Zcl" secondAttribute="bottom" id="zpV-Yd-Tre"/>
                             </constraints>
                         </customView>
-                        <customView fixedFrame="YES" id="YW2-HL-omL" customClass="BarChartView" customModule="Charts">
+                        <customView fixedFrame="YES" id="YW2-HL-omL" customClass="CombinedChartView" customModule="Charts">
                             <rect key="frame" x="0.0" y="274" width="615" height="278"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </customView>
@@ -284,7 +286,7 @@ DQ
                     </holdingPriorities>
                 </splitView>
                 <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K5R-TB-KpD">
-                    <rect key="frame" x="260" y="640" width="97" height="24"/>
+                    <rect key="frame" x="260" y="639" width="97" height="25"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="94" id="2wE-yX-h01"/>
                     </constraints>
@@ -298,9 +300,8 @@ DQ
                     </datePickerCell>
                 </datePicker>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8aA-Ku-aSc">
-                    <rect key="frame" x="605" y="17" width="33" height="21"/>
+                    <rect key="frame" x="600" y="17" width="38" height="21"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="28" id="PxP-4A-vyi"/>
                         <constraint firstAttribute="height" constant="17" id="b3Q-UM-xLl"/>
                     </constraints>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="xbO-zA-M1X">
