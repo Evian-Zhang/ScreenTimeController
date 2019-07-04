@@ -118,19 +118,19 @@ DQ
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aVc-IZ-Zcl">
-                                    <rect key="frame" x="0.0" y="0.0" width="615" height="139"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="615" height="114"/>
                                     <clipView key="contentView" id="L5u-cl-u2q">
-                                        <rect key="frame" x="1" y="0.0" width="613" height="138"/>
+                                        <rect key="frame" x="1" y="0.0" width="613" height="113"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="YCO-IT-QdU" viewBased="YES" id="1sL-A7-dMm">
-                                                <rect key="frame" x="0.0" y="0.0" width="613" height="113"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="613" height="88"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                 <tableColumns>
-                                                    <tableColumn identifier="STCCountedItemTableStartTimeColumn" width="367" minWidth="40" maxWidth="1000" id="nck-xL-LyN">
+                                                    <tableColumn identifier="STCCountedItemTableStartTimeColumn" editable="NO" width="367" minWidth="40" maxWidth="1000" id="nck-xL-LyN">
                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="start time">
                                                             <font key="font" metaFont="controlContent" size="11"/>
                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -192,7 +192,7 @@ DQ
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="17" id="ZpN-Gv-XqL"/>
                                                                         </constraints>
-                                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="waN-yQ-ndX">
+                                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Table View Cell" id="waN-yQ-ndX">
                                                                             <font key="font" metaFont="system"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -232,7 +232,7 @@ DQ
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="17" id="5d6-6e-RG5"/>
                                                                         </constraints>
-                                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Gzy-FW-z4v">
+                                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Table View Cell" id="Gzy-FW-z4v">
                                                                             <font key="font" metaFont="system"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

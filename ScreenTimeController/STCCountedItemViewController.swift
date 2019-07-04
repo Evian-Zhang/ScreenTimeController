@@ -59,8 +59,8 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
         self.combinedChartView?.doubleTapToZoomEnabled = false
         self.combinedChartView?.highlightPerTapEnabled = false
         self.combinedChartView?.gridBackgroundColor = .white
-        self.combinedChartView?.legend.enabled = false
         self.combinedChartView?.xAxis.labelPosition = .bottom
+        self.combinedChartView?.legend.textColor = .textColor
         self.combinedChartView?.xAxis.valueFormatter = self
         self.combinedChartView?.xAxis.labelTextColor = .textColor
         self.combinedChartView?.leftAxis.valueFormatter = self
@@ -71,26 +71,37 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
         self.combinedChartView?.noDataText = NSLocalizedString("No data Available", comment: "")
     }
     
-    func processChartData(countedItems: Array<STCCountedItem>) {
-        switch self.chartDisplayPopUpButton?.indexOfSelectedItem {
-        case 0:
-            self.prepareForHour(of: countedItems)
-            
-        case 1:
-            self.prepareForDay(of: countedItems)
-            
-        case 2:
-            self.prepareForWeek(of: countedItems)
-            
-        case 3:
-            self.prepareForMonth(of: countedItems)
-            
-        case 4:
-            self.prepareForYear(of: countedItems)
-            
-        default:
-            self.prepareForDay(of: countedItems)
+    func processChartData(countedItems: Array<STCCountedItem>?) {
+        if let items = countedItems {
+            if items.count > 0 {
+                switch self.chartDisplayPopUpButton?.indexOfSelectedItem {
+                case 0:
+                    self.prepareForHour(of: items)
+                    
+                case 1:
+                    self.prepareForDay(of: items)
+                    
+                case 2:
+                    self.prepareForWeek(of: items)
+                    
+                case 3:
+                    self.prepareForMonth(of: items)
+                    
+                case 4:
+                    self.prepareForYear(of: items)
+                    
+                default:
+                    self.prepareForDay(of: items)
+                }
+                return
+            }
+            self.chartXEntries = nil
+            self.notificationEntries = nil
+            self.pickupEntries = nil
         }
+        self.chartXEntries = nil
+        self.notificationEntries = nil
+        self.pickupEntries = nil
     }
     
     func processChart() {
@@ -101,17 +112,19 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
             pickupDataEntries.append(ChartDataEntry(x: Double(index), y:  Double(self.pickupEntries![index])))
         }
         let barChartData = BarChartData()
-        let notificationDataSet = BarChartDataSet(entries: notificationDataEntries)
+        let notificationDataSet = BarChartDataSet(entries: notificationDataEntries, label: NSLocalizedString("Notifications", comment: ""))
         notificationDataSet.colors = [self.barChartDataSetColor]
+        notificationDataSet.axisDependency = .left
         barChartData.addDataSet(notificationDataSet)
         barChartData.barWidth = self.barWidth
         barChartData.setValueFormatter(self)
         barChartData.setValueTextColor(.textColor)
         
         let lineChartData = LineChartData()
-        let pickupDataSet = LineChartDataSet(entries: pickupDataEntries)
+        let pickupDataSet = LineChartDataSet(entries: pickupDataEntries, label: NSLocalizedString("Pick ups", comment: ""))
         pickupDataSet.colors = [self.lineChartDataSetColor]
         pickupDataSet.fillColor = self.lineChartDataSetColor
+        pickupDataSet.axisDependency = .right
         lineChartData.addDataSet(pickupDataSet)
         lineChartData.setValueFormatter(self)
         lineChartData.setValueTextColor(.textColor)
@@ -160,13 +173,9 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
         default:
             self.currentDisplayUnit = .day
         }
-        if let countedItem = self.countedItems {
-            if countedItem.count > 0 {
-                self.processChartData(countedItems: countedItem)
-                self.processChart()
-                self.combinedChartView?.needsDisplay = true
-            }
-        }
+        self.processChartData(countedItems: self.countedItems)
+        self.processChart()
+        self.combinedChartView?.needsDisplay = true
     }
     
     @objc func queryButtonHandler() {
@@ -430,10 +439,8 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
         self.countedItems?.remove(at: index)
         if self.isViewLoaded && self.view.window != nil {
             self.countedItemTable?.reloadData()
-            if let countedItems = self.countedItems {
-                self.processChartData(countedItems: countedItems)
-                self.processChart()
-            }
+            self.processChartData(countedItems: countedItems)
+            self.processChart()
         }
     }
     
@@ -460,10 +467,8 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
         self.countedItems![index] = newCountedItem
         if self.isViewLoaded && self.view.window != nil {
             self.countedItemTable?.reloadData()
-            if let countedItems = self.countedItems {
-                self.processChartData(countedItems: countedItems)
-                self.processChart()
-            }
+            self.processChartData(countedItems: countedItems)
+            self.processChart()
         }
     }
     
@@ -516,7 +521,7 @@ class STCCountedItemViewController: NSViewController, NSTableViewDelegate, NSTab
         
         if let view = tableView.makeView(withIdentifier: identifier, owner: nil) as? NSTableCellView {
             view.textField?.stringValue = text
-            if tableColumn?.identifier.rawValue == "STCCountedItemTableNotifications" || tableColumn?.identifier.rawValue == "STCCountedItemTablePickups" {
+            if tableColumn?.identifier.rawValue == "STCCountedItemTableNotificationsColumn" || tableColumn?.identifier.rawValue == "STCCountedItemTablePickupsColumn" {
                 view.textField?.isEditable = true
                 view.textField?.delegate = self
                 let numberFormatter = NumberFormatter()

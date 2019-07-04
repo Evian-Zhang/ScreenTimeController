@@ -69,42 +69,58 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         self.barChartView?.noDataText = NSLocalizedString("No data Available", comment: "")
     }
     
-    func processChartData(timeEntries: Array<STCTimedItem>) {
-        switch self.chartDisplayPopUpButton?.indexOfSelectedItem {
-        case 0:
-            self.prepareForHour(of: timeEntries)
-            
-        case 1:
-            self.prepareForDay(of: timeEntries)
-            
-        case 2:
-            self.prepareForWeek(of: timeEntries)
-            
-        case 3:
-            self.prepareForMonth(of: timeEntries)
-            
-        case 4:
-            self.prepareForYear(of: timeEntries)
-            
-        default:
-            self.prepareForDay(of: timeEntries)
+    func processChartData(timeEntries: Array<STCTimedItem>?) {
+        if let entries = timeEntries {
+            if entries.count > 0 {
+                switch self.chartDisplayPopUpButton?.indexOfSelectedItem {
+                case 0:
+                    self.prepareForHour(of: entries)
+                    
+                case 1:
+                    self.prepareForDay(of: entries)
+                    
+                case 2:
+                    self.prepareForWeek(of: entries)
+                    
+                case 3:
+                    self.prepareForMonth(of: entries)
+                    
+                case 4:
+                    self.prepareForYear(of: entries)
+                    
+                default:
+                    self.prepareForDay(of: entries)
+                }
+                return
+            }
+            self.chartXEntries = nil
+            self.chartYEntries = nil
         }
+        self.chartXEntries = nil
+        self.chartYEntries = nil
     }
     
     func processChart() {
-        var barChartDataEntries = Array<BarChartDataEntry>()
-        for index in 0 ..< (self.chartYEntries?.count)! {
-            barChartDataEntries.append(BarChartDataEntry(x: Double(index), y: self.chartYEntries![index].doubleValue()))
+        if let chartYEntries = self.chartYEntries {
+            if chartYEntries.count > 0 {
+                var barChartDataEntries = Array<BarChartDataEntry>()
+                for index in 0 ..< chartYEntries.count {
+                    barChartDataEntries.append(BarChartDataEntry(x: Double(index), y: chartYEntries[index].doubleValue()))
+                }
+                let barChartData = BarChartData()
+                let barChartDataSet = BarChartDataSet(entries: barChartDataEntries)
+                barChartDataSet.colors = [self.barChartDataSetColor]
+                barChartData.addDataSet(barChartDataSet)
+                
+                barChartData.barWidth = self.barWidth
+                barChartData.setValueFormatter(self)
+                barChartData.setValueTextColor(.textColor)
+                self.barChartView?.data = barChartData
+                return
+            }
+            self.barChartView?.data = nil
         }
-        let barChartData = BarChartData()
-        let barChartDataSet = BarChartDataSet(entries: barChartDataEntries)
-        barChartDataSet.colors = [self.barChartDataSetColor]
-        barChartData.addDataSet(barChartDataSet)
-        
-        barChartData.barWidth = self.barWidth
-        barChartData.setValueFormatter(self)
-        barChartData.setValueTextColor(.textColor)
-        self.barChartView?.data = barChartData
+        self.barChartView?.data = nil
     }
     
     func canQuery() -> (Bool, String?) {
@@ -144,13 +160,9 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         default:
             self.currentDisplayUnit = .day
         }
-        if let timeEntries = self.timeEntries {
-            if timeEntries.count > 0 {
-                self.processChartData(timeEntries: timeEntries)
-                self.processChart()
-                self.barChartView?.needsDisplay = true
-            }
-        }
+        self.processChartData(timeEntries: self.timeEntries)
+        self.processChart()
+        self.barChartView?.needsDisplay = true
     }
     
     @objc func queryButtonHandler() {
@@ -191,7 +203,6 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
     func readTimeEntries(timeEntries: Array<STCTimedItem>) {
         self.timeEntries = timeEntries
         self.screenTimeTable?.reloadData()
-        
         self.processChartData(timeEntries: timeEntries)
         self.processChart()
         self.progressIndicator?.stopAnimation(nil)
@@ -385,10 +396,8 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         self.timeEntries?.remove(at: index)
         if self.isViewLoaded && self.view.window != nil {
             self.screenTimeTable?.reloadData()
-            if let timeEntries = self.timeEntries {
-                self.processChartData(timeEntries: timeEntries)
-                self.processChart()
-            }
+            self.processChartData(timeEntries: self.timeEntries)
+            self.processChart()
         }
     }
     
@@ -415,10 +424,8 @@ class STCScreenTimeViewController: NSViewController, NSTableViewDelegate, NSTabl
         self.timeEntries![index] = newTimedItem
         if self.isViewLoaded && self.view.window != nil {
             self.screenTimeTable?.reloadData()
-            if let timeEntries = self.timeEntries {
-                self.processChartData(timeEntries: timeEntries)
-                self.processChart()
-            }
+            self.processChartData(timeEntries: self.timeEntries)
+            self.processChart()
         }
     }
     
