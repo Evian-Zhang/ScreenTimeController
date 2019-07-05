@@ -93,6 +93,6 @@
 
 我是一名默默无闻的本科生，利用闲暇时光进行这些开发。如果您支持我的工作，希望不吝捐赠！
 
-![支付宝](Readme_assets/alipay.jpg)
+![支付宝](README.assets/alipay.jpg)
 
-![微信](Readme_assets/wechat.jpg)
+![微信](README.assets/wechat.jpg)
